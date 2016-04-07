@@ -1,0 +1,441 @@
+
+body {
+    box-sizing: border-box;
+    font-family: arial,helvetica,sans-serif;
+    font-size: 120%;
+    padding: 0 1em;
+}
+label span, #butt label {
+    left: -1000em;
+    position: absolute;
+    top: -1000em;
+}
+#input textarea {
+    min-height: 25em;
+}
+#input ul li:first-child label {
+    display: block;
+}
+#regexes div {
+    position: relative;
+}
+#regexes div p {
+    display: none;
+    margin-top: 1em;
+}
+p.note {
+    line-height: 1em;
+    margin-bottom: 2em;
+    margin-left: 3.5em;
+    text-indent: -3.5em;
+}
+li.bad-regex {
+    box-shadow: 0 0 0.5em #f00;
+}
+#regexes div:hover p {
+    display: block;
+}
+.frInputWrap {
+    top: -1.5em;
+}
+.frInputWrap label {
+    font-family: verdana,arial,helvetica,sans-serif;
+    font-size: 140%;
+    font-weight: bold;
+    padding-right: 0.5em;
+}
+.frInputWrap input, .frInputWrap textarea {
+    border: 0.1em solid #ddd;
+    border-radius: 0.3em;
+    font-family: monospace;
+    margin-top: 0.2em;
+    padding: 0.3em 0.5em;
+    width: 100%;
+}
+.frInputWrap textarea {
+    height: 20em !important;
+}
+.checkbox-check {
+    position: relative;
+    top: -1em;
+}
+.checkbox-check label {
+    font-weight: normal !important;
+}
+.checkbox-check label:first-child {
+    padding-right: 2em;
+}
+.checkbox-check input[type="text"] {
+    font-family: monospace;
+    font-weight: normal;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+label.disabled, li.disabled label {
+    color: #ccc;
+    font-weight: normal;
+}
+header h1, header h2 {
+    line-height: 1em;
+    margin: 0;
+    text-align: center;
+}
+header h1 {
+    padding: 0.5em 0 0.2em;
+}
+header h2 {
+    font-size: 133%;
+    font-weight: normal;
+    white-space: nowrap;
+}
+fieldset h2 {
+    font-size: 128.6%;
+    font-weight: bold;
+}
+.hiding {
+    left: -10000em;
+    position: absolute;
+    top: -10000em;
+}
+.remove {
+    display: none !important;
+}
+.regexes {
+    padding-top: 1em;
+}
+.regexes li {
+    margin-bottom: 1.75em;
+    margin-left: 1em;
+    padding-left: 0;
+}
+input.find, textarea.find {
+    background-color: #dfd;
+}
+input.replace, textarea.replace {
+    background-color: #eef;
+}
+textarea {
+    display: block;
+    height: 20em;
+    margin-right: 1em;
+    width: 100%;
+}
+ol.regexes {
+    padding-left: 0;
+}
+.inline {
+    margin: 0;
+    padding: 0;
+}
+.inline li {
+    display: inline;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 1em 0 0;
+    white-space: nowrap;
+}
+.btn.b-left {
+    border-bottom-left-radius: 1.5em;
+    border-top-left-radius: 1.5em;
+}
+.btn.b-right {
+    border-bottom-right-radius: 1.5em;
+    border-top-right-radius: 1.5em;
+}
+dl.table-def {
+    line-height: 1.2em;
+}
+dl.table-def dt {
+    font-weight: bold;
+    margin: 0 0 -1.4em;
+}
+dl.table-def dd {
+    margin-bottom: 0.5em;
+    margin-right: 0;
+    margin-top: 0;
+    padding: 0 0 0 1em;
+}
+dl.table-def.close dd {
+    margin-bottom: 0;
+}
+dl.table-def.X2 dt {
+    width: 2em;
+}
+dl.table-def.X2 dd {
+    margin-left: 2em;
+}
+dl.table-def.X3 dt {
+    width: 3em;
+}
+dl.table-def.X3 dd {
+    margin-left: 3em;
+}
+dl.table-def.X4 dt {
+    width: 4em;
+}
+dl.table-def.X4 dd {
+    margin-left: 4em;
+}
+dl.table-def.X5 dt {
+    width: 5em;
+}
+dl.table-def.X5 dd {
+    margin-left: 5em;
+}
+dl.table-def.X6 dt {
+    width: 6em;
+}
+dl.table-def.X6 dd {
+    margin-left: 6em;
+}
+dl.table-def.X7 dt {
+    width: 7em;
+}
+dl.table-def.X7 dd {
+    margin-left: 7em;
+}
+dl.table-def.X8 dt {
+    width: 8em;
+}
+dl.table-def.X8 dd {
+    margin-left: 8em;
+}
+section#results {
+    padding: 0.5em 0;
+    position: relative;
+}
+section#results h2 {
+    color: rgb(0, 75, 0);
+    margin: 0;
+    padding: 0.5em 1em 0.5em 0.5em;
+}
+section#results ol {
+    padding: 1em;
+}
+.results ol li {
+    border-top: 0.1em solid #000;
+    list-style-type: lower-alpha;
+    padding-bottom: 0.5em;
+    padding-top: 1.5em;
+}
+.results ol li:first-of-type {
+    background-color: transparent;
+    border-top: medium none;
+    margin-top: 1em;
+}
+.results ol li ol {
+    background-color: transparent;
+    border: medium none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    box-shadow: none;
+    margin-top: -1em;
+    max-height: none;
+    padding: 0;
+    position: static;
+}
+ol.multi-sample li {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #888 -moz-use-text-color -moz-use-text-color;
+    border-image: none;
+    border-style: dashed none none;
+    border-width: 0.1em medium medium;
+    list-style-type: lower-alpha;
+    padding-bottom: 0;
+    padding-top: 0.5em;
+}
+ol.single-sample li, .multi-sample ol li {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #888 -moz-use-text-color -moz-use-text-color;
+    border-image: none;
+    border-style: dotted none none;
+    border-width: 0.1em medium medium;
+    list-style-type: decimal;
+    padding-bottom: 0;
+    padding-top: 0.5em;
+}
+ol.single-sample li:first-of-type, .multi-sample ol li:first-of-type {
+    border-top: medium none;
+    margin-top: 0;
+    padding-top: 0;
+}
+dd.matched ol li {
+    border-top: medium none;
+    list-style-type: lower-roman;
+    margin: 0 0 0 2em;
+    padding: 0;
+}
+dd.matched ol li ol {
+    margin-top: 0;
+    padding-bottom: 0.5em;
+}
+dd.matched ol.matched-parts li {
+    list-style-type: decimal;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+dd.matched ol.matched-parts.named {
+    counter-reset: mblock;
+}
+dd.matched ol.matched-parts.named li {
+    counter-increment: mblock;
+    display: block;
+    list-style: outside none none;
+    margin-left: 0;
+    padding-left: 0;
+}
+dd.matched ol.matched-parts.named li {
+    display: table-row;
+}
+dd.matched ol.matched-parts.named li::before {
+    content: counter(mblock, decimal) ". ";
+    padding-right: 0.5em;
+}
+dd.matched ol.matched-parts.named li span.name {
+    display: table-cell;
+    font-family: monospace;
+    font-weight: bold;
+    padding-right: 0.5em;
+}
+dd.matched ol.matched-parts.named li span.value {
+    display: table-cell;
+}
+dd.matched ol.matched-parts.named li span.value::before {
+    content: ": ";
+}
+.regex-pattern, .error_high {
+    font-family: monospace;
+}
+dt.dud, dt.dud + dd {
+    color: #aaa;
+}
+span.ok, span.error, span.problem {
+    padding: 0.3em 0.1em;
+}
+span.ok:first-of-type, span.error:first-of-type, span.problem:first-of-type {
+    padding-left: 0.6em;
+}
+span.ok:last-of-type, span.error:last-of-type, span.problem:last-of-type {
+    padding-right: 0.6em;
+}
+span.ok {
+    background-color: #0f0;
+    color: #00f;
+}
+span.problem {
+    background-color: #ff0;
+    color: #f00;
+}
+span.error {
+    background-color: #f00;
+    color: #ff0;
+}
+.space {
+    color: #aaa;
+    font-size: 0.6rem;
+    font-style: italic;
+}
+span.whole {
+    font-size: 120%;
+}
+span.whole::after {
+    color: #55b;
+    content: " (whole string)";
+    font-size: 83.3%;
+    padding-left: 0.5em;
+}
+#templates {
+	display: none;
+}
+
+#regexEngines legend {
+    border-bottom: medium none;
+    font-size: 120%;
+    margin-bottom: 0.1em;
+}
+#regexEngines li * {
+	font-size: 80%;
+}
+#regexEngines li input {
+	font-size: 70%;
+}
+
+.regexPair .add-remove {
+	display: none;
+}
+.regexPair:hover .add-remove {
+	display: block
+}
+.engine-radio {
+	position: relative;
+	top: 0.4em;
+}
+
+.btn.btn-before {
+    border-bottom-left-radius: 1.5em;
+    border-top-left-radius: 1.5em;
+}
+.btn.btn-after {
+    border-bottom-right-radius: 1.5em;
+    border-top-right-radius: 1.5em;
+}
+
+@media (max-width: 52em) {
+	.frInputWrap {
+		display: table;
+		width: 100%;
+	}
+	.frInputWrap label {
+		display: table-cell;
+		font-size: 100%;
+		width: 20%;
+	}
+	.has-textarea .frInputWrap label {
+		vertical-align: top;
+	}
+	.frInputWrap input {
+		display: table-cell;
+	}
+	.frInputWrap .hiding {
+		position: static;
+	}
+	body {
+		padding-bottom: 7em;
+	}
+	#butt {
+		background-color: rgba(220, 220, 220, 0.7);
+		bottom: 0;
+		left: 0;
+		padding-bottom: 0.5em;
+		padding-top: 0.5em;
+		position: fixed;
+		right: 0;
+		text-align: center;
+	}
+	#butt p { margin: 0% !important; }
+	#butt legend {
+		display: none;
+	}
+	#butt ul {
+		text-align: center;
+	}
+	a[rel="sidebar"] {
+		display: none;
+	}
+}
+@media (max-width: 19em) {
+	.frInputWrap .hiding {
+		position: absolute;
+	}
+	.frInputWrap input, .frInputWrap textarea {
+		display: block;
+	}
+}

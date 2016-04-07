@@ -1,0 +1,3 @@
+[submodule "xregexp"]
+	path = xregexp
+	url = git@github.com:slevithan/xregexp.git
