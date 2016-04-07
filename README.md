@@ -35,7 +35,20 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 #### when doReplace is FALSE:
 ``` JSON
 {
-	'success': [bool],
+	'doReplace': false,		// boolean
+	'message': '',			// general error messages if any.
+	'regexErrors': [
+		{
+			'regexID': [int],	// required
+			'message': [int],	// required
+			'patternParts: {	// optional (if supported)
+				'good': '',
+				'problem': '',
+				'bad': ''
+			}
+		},
+		{...}
+	],
 	'samples': [
 		{
 			'sampleID': [int]
@@ -49,31 +62,32 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 							wholeMatch: [string],
 							subPatterns: [
 								[string],
-								[string],
 								...
 							]
 						},
 						{...}
 
-					]
+					],
+					'seconds': [float] // how long it took to apply the regex to the sample
 				},
 				{...}
 			]
 		}
 	],
-	'message': ''
+	'success': [bool]
 }
 ```
 #### when doReplace is TRUE:
 Only the find/replace output is returned.
 ``` JSON
 {
-	'success': [bool],
+	'doReplace': true,	// boolean
+	'message': '',			// general error messages if any.
 	'samples': [
 		[string],
 		...
 	],
-	'message': ''
+	'success': [bool],
 }
 ```
 
