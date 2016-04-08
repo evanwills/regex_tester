@@ -76,7 +76,9 @@ $.RegexDoerLocal = function (doXregexp) {
         var a = 0,
             tmpLen = 0,
             tmpMatch,
-            output = {'matched': false, result: []};
+            output = {'matched': false, result: []},
+			tmp,
+			tmpResult = {'wholeMatch':'', 'subPatterns': []};
 
         if (regexObj.ok === true) {
             tmpMatch = RegexAdapter.match(regexObj.regexp, sample);
@@ -85,10 +87,11 @@ $.RegexDoerLocal = function (doXregexp) {
                 if (regexObj.isGlobal) {
                     tmpLen = tmpMatch.length;
                     for (a = 0; a < tmpLen; a += 1) {
-                        output.result.push(tmpMatch[a].match(regexObj.regexp));
+						tmp = tmpMatch[a].match(regexObj.regexp);
+                        output.result.push({'wholeMatch': tmp.shift(), 'subPatterns': tmp});
                     }
                 } else {
-                    output.result.push(tmpMatch);
+                    output.result.push({'wholeMatch': tmpMatch.shift(), 'subPatterns': tmpMatch});
                 }
             }
         }
