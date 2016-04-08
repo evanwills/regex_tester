@@ -2,7 +2,7 @@
 Regular Expression tester/find &amp; replace front end and API to interact with local (client) and server based regular expression engines.
 
 ## About
-This project is a reimplementation of my earlier web based UI for PHP's (PCRE) regular expression engine.
+This project is a reimplementation of my earlier web based UI for [PHP's (PCRE) regular expression engine](https://github.com/evanwills/preg_test).
 
 Currently the only regex engine implemented is the vanilla JavaScript Engine. But most of the work is done for the xRegExp and PHP PCRE engines.
 
