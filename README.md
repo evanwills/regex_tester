@@ -40,7 +40,7 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 	'regexErrors': [
 		{
 			'regexID': [int],	// required
-			'message': [int],	// required
+			'message': [string],	// required
 			'patternParts': {	// optional (if supported)
 				'good': '',
 				'problem': '',
