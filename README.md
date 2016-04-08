@@ -4,6 +4,10 @@ Regular Expression tester/find &amp; replace front end and API to interact with 
 ## About
 This project is a reimplementation of my earlier web based UI for [PHP's (PCRE) regular expression engine](https://github.com/evanwills/preg_test).
 
+It's aim is to provide a way of testing regular expressions using a variety of regular expression engines. It also provides a way of doing sophisticated find and replace using multiple regular expressions applied sequentially to the supplied sample.
+
+By using an API via HTTP you reduce the data being sent back and fourth to the server (which was a problem when applying regular expressions to a large chunk of text using the original [preg_test](https://github.com/evanwills/preg_test) version.)
+
 Currently the only regex engine implemented is the vanilla JavaScript Engine. But most of the work is done for the xRegExp and PHP PCRE engines.
 
 ## API
