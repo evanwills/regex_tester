@@ -8,7 +8,7 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 
 ## API
 ### Post object
-``` JSON
+``` json
 {
 	'delimClose': '',		// single char
 	'delimOpen': '',		// single char
@@ -17,8 +17,8 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 	'matchResultLen': 300,	// int > 6
 	'regexPairs': [			// array of objects:
 		{
-			id: 0,
-			ok: false,
+			'id': 0,
+			'ok': false,
 			'find': '',
 			'replace': '', 'modifiers': ''
 		},
@@ -33,7 +33,7 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 
 ### Return object
 #### when doReplace is FALSE:
-``` JSON
+``` json
 {
 	'doReplace': false,		// boolean
 	'message': '',			// general error messages if any.
@@ -41,7 +41,7 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 		{
 			'regexID': [int],	// required
 			'message': [int],	// required
-			'patternParts: {	// optional (if supported)
+			'patternParts': {	// optional (if supported)
 				'good': '',
 				'problem': '',
 				'bad': ''
@@ -59,8 +59,8 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 					'matched': [bool]
 					'matches': [
 						{
-							wholeMatch: [string],
-							subPatterns: [
+							'wholeMatch': [string],
+							'subPatterns': [
 								[string],
 								...
 							]
@@ -79,10 +79,10 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 ```
 #### when doReplace is TRUE:
 Only the find/replace output is returned.
-``` JSON
+``` json
 {
 	'doReplace': true,	// boolean
-	'message': '',			// general error messages if any.
+	'message': '',		// general error messages if any.
 	'samples': [
 		[string],
 		...
