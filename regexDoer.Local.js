@@ -27,6 +27,7 @@ $.RegexDoerLocal = function (doXregexp) {
 				try {
 					output = new XRegExp(regex, modifiers);
 				} catch (e) {
+					console.warn(e);
 					throw e.message;
 				}
 				return output;
@@ -46,6 +47,7 @@ $.RegexDoerLocal = function (doXregexp) {
 				try {
 					output = new RegExp(regex, modifiers);
 				} catch (e) {
+					console.warn(e);
 					throw e.message;
 				}
 				return output;
@@ -78,7 +80,7 @@ $.RegexDoerLocal = function (doXregexp) {
             tmpMatch,
             output = {'matched': false, result: []},
 			tmp,
-			tmpResult = {'wholeMatch':'', 'subPatterns': []};
+			tmpResult = {'wholeMatch': '', 'subPatterns': []};
 
         if (regexObj.ok === true) {
             tmpMatch = RegexAdapter.match(regexObj.regexp, sample);
@@ -97,34 +99,6 @@ $.RegexDoerLocal = function (doXregexp) {
         }
         return output;
     }
-
-
-
-	this.validateRegex = function (regex, modifiers, delim) {
-		var output = {regexp: null, isGlobal: false, ok: true, errorMsg: ''};
-
-		if (typeof regex !== 'string' || regex === '') {
-			throw {'message': '$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given'};
-		}
-		try {
-			engine.validateModifiers(modifiers);
-		} catch (e) {
-			throw {'message': '$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message};
-		}
-
-		try {
-			console.log(RegexAdapter);
-			output.regexp = RegexAdapter.tryRegExp(regex, modifiers);
-		} catch (e) {
-			output.errorMsg = e.message;
-			output.ok = false;
-		}
-		if (modifiers.match(/g/)) {
-			output.isGlobal = true;
-		}
-		return output;
-	};
-
 
 
 	/**
@@ -168,25 +142,67 @@ $.RegexDoerLocal = function (doXregexp) {
 		return output;
 	}
 
+
+	this.validateRegex = function (regex, modifiers, delim) {
+		var output = {regexp: null, isGlobal: false, ok: true, errorMsg: ''};
+
+		if (typeof regex !== 'string' || regex === '') {
+			console.warn('$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given');
+			throw {'message': '$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given'};
+		}
+		try {
+			engine.validateModifiers(modifiers);
+		} catch (e) {
+			console.warn('$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message);
+			throw {'message': '$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message};
+		}
+
+		try {
+			console.log(RegexAdapter);
+			output.regexp = RegexAdapter.tryRegExp(regex, modifiers);
+		} catch (e) {
+			output.errorMsg = e.message;
+			output.ok = false;
+		}
+		if (modifiers.match(/g/)) {
+			output.isGlobal = true;
+		}
+		return output;
+	};
+
+
 	this.testRegex = function (jsonObj) {
 		var a = 0,
 			b = 0,
-            regexes = [],
+            output = {
+				'doReplace': jsonObj.doReplace,
+				'message': '',
+				'regexErrors': [],
+				'samples': [],
+				'success': true
+			},
 			regexAdapter = new RegexAdapter(),
 			tmpResult,
 			tmpRegex;
+
 
 		console.log('inside RegexDoerLocal::testRegex() (in ' + mode + ' mode)');
 
 		for (a = 0; a < jsonObj.regexPairs.length; a += 1) {
             jsonObj.regexPairs[a].parsed = this.validateRegex(jsonObj.regexPairs[a].find, jsonObj.regexPairs[a].modifiers);
+			if (jsonObj.regexPairs[a].parsed.ok === false) {
+				output.regexErrors.push({
+					'regexID': jsonObj.regexPairs[a].id,
+					'message': jsonObj.regexPairs[a].parsed.errorMsg
+				});
+			}
         }
 
         for (a = 0; a < jsonObj.sample.length; a += 1) {
-			regexes.push({'sampleID': a, 'sampleResult': processSample(jsonObj.regexPairs, jsonObj.sample[a], regexAdapter)});
+			output.samples.push({'sampleID': a, 'sampleMatches': processSample(jsonObj.regexPairs, jsonObj.sample[a], regexAdapter)});
 		}
 
-		return regexes;
+		return output;
 	};
 
 

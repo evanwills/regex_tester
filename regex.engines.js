@@ -40,7 +40,7 @@ $.RegexEngine = function (variety) {
 		delimRegex = new RegExp('[^\w0-9\s]$'),
 		modifierRegex,
 		tmp,
-		validDelimiters;
+		validDelimiters = '';
 
 	if (variety.name !== undefined) {
 		name = variety.name.replace(/[^a-z0-9\s_\-]+/ig, '');

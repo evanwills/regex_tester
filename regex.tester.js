@@ -50,6 +50,7 @@ $.RegexTest = function (varieties) {
 		return input.replace(/\{\{ITEM\}\}/g, (id + 1));
 	}
 
+
 	function setRenderWSfunc(e) {
 		if ($(e.target).val() === 1) {
 			doRenderWS = function (input) {
@@ -58,7 +59,8 @@ $.RegexTest = function (varieties) {
 					replace = [];
 
 				if (typeof input !== 'string') {
-					throw { message: 'renderWS() expects first input to be a string. ' + typeof input + 'given.' };
+					console.warn('renderWS() expects first input to be a string. ' + typeof input + 'given.');
+					throw { message: 'renderWS() expects first input to be a string. ' + typeof input + 'given.'};
 				}
 
 				find.push(new RegExp(' ', 'g'));
@@ -76,11 +78,12 @@ $.RegexTest = function (varieties) {
 					input = input.replace(find[a], replace[a]);
 				}
 				return input;
-			}
+			};
 		} else {
 			doRenderWS = function (input) { return input; };
 		}
 	}
+
 
 	/**
 	 * @function newPair() returns the raw HTML for a new Regex pair block
@@ -108,6 +111,7 @@ $.RegexTest = function (varieties) {
 
 		return output;
 	}
+
 
 	/**
 	 * @function changeFieldType() converts text <INPUT> fields to
@@ -147,6 +151,7 @@ $.RegexTest = function (varieties) {
 		$('#find' + id).val(findValue);
 		$('#replace' + id).val(replaceValue);
 	}
+
 
 	/**
 	 * @function updatePairs() goes through each regex pair and
@@ -217,6 +222,7 @@ $.RegexTest = function (varieties) {
 		});
 	}
 
+
 	/**
 	 * @function removePair() removes a regexPair block (and
 	 *			 renumbers all subsequent regexPair blocks)
@@ -238,6 +244,7 @@ $.RegexTest = function (varieties) {
 		console.log((id + 1) <= $('#regexes-pairs li').length);
 		updatePairs();
 	}
+
 
 	/**
 	 * @function addNewPair() adds a new pair either before or after
@@ -338,6 +345,7 @@ $.RegexTest = function (varieties) {
 		$('#regexp' + id).data('regex', id);
 	}
 
+
 	function addEngineVariety(engine) {
 		var newEngine,
 			engineName = '',
@@ -356,13 +364,16 @@ $.RegexTest = function (varieties) {
 		console.log(engines);
 	}
 
+
 	function sampleHasChanged(input) {
 		if (typeof input === 'boolean') {
 			$(sampleField).data('haschanged', input);
 		} else {
+			console.warn('sampleHasChanged() input must be boolean');
 			throw 'sampleHasChanged() input must be boolean';
 		}
 	}
+
 
 	function parseSample() {
 		var a = 0;
@@ -394,10 +405,12 @@ $.RegexTest = function (varieties) {
 		}
 	}
 
+
 	function getRegexPair(id) {
 		var output = { id: 0, ok: false, 'find': '', 'replace': '', 'modifiers': '' };
 
 		if (typeof id !== 'number') {
+			console.warn('getRegexPair() expects param id to be a number! ' + typeof id + ' given.');
 			throw 'getRegexPair() expects param id to be a number! ' + typeof id + ' given.';
 		}
 		output.id = id;
@@ -413,6 +426,7 @@ $.RegexTest = function (varieties) {
 		}
 		return output;
 	}
+
 
 	function buildJSONobject(doReplace) {
 		var a = 0,
@@ -457,6 +471,7 @@ $.RegexTest = function (varieties) {
 				if ($(this).data('regex') !== undefined && typeof ($(this).data('regex') * 1) === 'number') {
 					newPairID = ($(this).data('regex') * 1);
 				} else {
+					console.warn('buildJSONobject() expects each regexPair block to have a data attribute named "regex" with a numeric value');
 					throw 'buildJSONobject() expects each regexPair block to have a data attribute named "regex" with a numeric value';
 				}
 
@@ -475,7 +490,11 @@ $.RegexTest = function (varieties) {
 		return jsonObj;
 	}
 
-	function renderProblemRegex() {}
+
+	function renderProblemRegex(regexErrors) {
+
+	}
+
 
 	function HtmlEncode(input) {
 		var el = document.createElement("div");
@@ -483,20 +502,25 @@ $.RegexTest = function (varieties) {
 		return el.innerHTML;
 	}
 
+
 	function renderReturn(input, jsonObj) {
 		var a = 0;
 		console.log('inside renderReturn()');
 		console.log('input: ', input);
 		console.log('jsonObj: ', jsonObj);
 
-		if (typeof input !== 'array') {
-			throw {'message': 'renderReturn() expects first parameter [input] to be an array containing the object returned from a regexDoer. ' typeof input + ' given.'};
+		if (typeof input !== 'object' && typeof input.doReplace === 'boolean' && typeof input.message === 'string' && input.regexErrors !== undefined && input.samples !== undefined && typeof input.success === 'boolean') {
+			console.warn('renderReturn() expects first parameter [input] to be an object containing with the following properties: doReplace, message, regexErrors, samples & success');
+			throw {'message': 'renderReturn() expects first parameter [input] to be an object containing with the following properties: doReplace, message, regexErrors, samples & success'};
 		}
 
-		for (a = 0; a < input.length; a += 1) {
+		renderProblemRegex(input.regexErrors);
 
+		for (a = 0; a < input.samples; a += 1) {
+			a = 100;
 		}
 	}
+
 
 	function doRegex(replace, event, doReplace) {
 		var jsonObject = buildJSONobject(doReplace),
@@ -520,26 +544,33 @@ $.RegexTest = function (varieties) {
 		}
 	}
 
+
 	this.validateRegex = function (id) {
 		var jsonObject = buildJSONobject();
 
 	};
 
+
 	this.testRegex = function (e) {
 		doRegex(false, e, false);
 	};
+
 
 	this.regexFindReplace = function (e) {
 		doRegex(true, e, true);
 	};
 
+
 	this.setCustomFieldID = function (fieldName, fieldID) {
 		if (typeof fieldID !== 'string') {
+			console.warn('RegexTest::setCustomFieldID() expects fieldID to be a string. ' + typeof fieldName + ' given.');
 			throw 'RegexTest::setCustomFieldID() expects fieldID to be a string. ' + typeof fieldName + ' given.';
 		} else if ($(fieldID).length === 0) {
+			console.warn('RegexTest::setCustomFieldID() expects fieldID to be an existing form field ID. "' + fieldID + '" does not exist.');
 			throw 'RegexTest::setCustomFieldID() expects fieldID to be an existing form field ID. "' + fieldID + '" does not exist.';
 		}
 		if (typeof fieldName !== 'string') {
+			console.warn('RegexTest::setCustomFieldID() expects fieldName to be a string. ' + typeof fieldName + ' given.');
 			throw 'RegexTest::setCustomFieldID() expects fieldName to be a string. ' + typeof fieldName + ' given.';
 		}
 		switch (fieldName) {
@@ -563,6 +594,7 @@ $.RegexTest = function (varieties) {
 			if ($(fieldID).attr('name') !== undefined && $(fieldID).attr('name') !== '') {
 				wsAction = 'input[name="' + $(fieldID).attr('name') + '"]';
 			} else {
+				console.warn('RegexTest::setCustomFieldID() expects fieldName "' + fieldID + '" to be an input (or select) field with a name attribute');
 				throw 'RegexTest::setCustomFieldID() expects fieldName "' + fieldID + '" to be an input (or select) field with a name attribute';
 			}
 			break;
@@ -576,9 +608,13 @@ $.RegexTest = function (varieties) {
 			sampleDelim = fieldID;
 			break;
 		default:
+			console.warn('RegexTest::setCustomFieldID() expects fieldName to be one of the following "regexDelim", "sampleField", "maxLenSamp", "maxLenMatch", "wsTrim", "wsAction", "splitSample" or "sampleDelim". "' + fieldName + '" given');
 			throw 'RegexTest::setCustomFieldID() expects fieldName to be one of the following "regexDelim", "sampleField", "maxLenSamp", "maxLenMatch", "wsTrim", "wsAction", "splitSample" or "sampleDelim". "' + fieldName + '" given';
 		}
 	};
+
+	// ==========================================
+	// START: doing object initialisation stuff.
 
 	engines.push(
 		new $.RegexEngine({
@@ -613,13 +649,14 @@ $.RegexTest = function (varieties) {
 			$(this).attr('pattern', workingEngine.getModifiers());
 		}
 
-		console.log(this);
 		for (a = 0; a < engines.length; a += 1) {
 			if (engines[a].getName() === $(this).val()) {
 				console.log(this);
 				workingEngine = engines[a];
+
 				$('.modifiers').each(setPattern);
-				if (workingEngine.validateDelim(regexDelim) !== true) {
+
+				if (workingEngine.delimIsValid(regexDelim) !== true) {
 					$(regexDelim).val(workingEngine.getDelimOpen());
 				}
 				break;
@@ -629,6 +666,7 @@ $.RegexTest = function (varieties) {
 
 			if (workingEngine.getName() === 'Vanilla JS') {
 				console.log('using $.RegexDoerLocal (Vanilla JS mode)');
+				console.log($.RegexDoerLocal);
 				regexDoer = new $.RegexDoerLocal(false);
 			} else {
 				console.log('using $.RegexDoerLocal (XRegex mode)');
@@ -648,7 +686,6 @@ $.RegexTest = function (varieties) {
 
 	$('#regexVanillaJS').trigger('change');
 
-
 	$(sampleField).on('change', function () { sampleHasChanged(true); });
 	$(wsTrim).on('change', function () {
 		sampleHasChanged(true);
@@ -662,6 +699,7 @@ $.RegexTest = function (varieties) {
 			});
 		}
 	});
+
 	$(wsAction).on('change', function () { sampleHasChanged(true); });
 	$(splitSample).on('change', function () {
 		sampleHasChanged(true);
@@ -671,6 +709,7 @@ $.RegexTest = function (varieties) {
 			$(sampleDelim).attr('disabled', true);
 		}
 	});
+
 	$(sampleDelim).on('change', function () { sampleHasChanged(true); });
 	$(renderWs).on('change', setRenderWSfunc);
 };
