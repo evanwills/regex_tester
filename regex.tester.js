@@ -255,27 +255,6 @@ $.RegexTest = function (varieties) {
 	}
 
 
-	function activateAddButton(e) {
-		var tmpID,
-			tmpPos,
-			tmpTextArea = false;
-
-		e.preventDefault();
-
-		tmpID = $(this).data('regex');
-		tmpPos = $(this).data('pos');
-
-		console.log('about to add');
-
-		if ($('#makeTextarea' + tmpID).is('checked')) {
-			tmpTextArea = true;
-		}
-
-		addNewPair(tmpID, tmpPos, tmpTextArea);
-
-		return false;
-	}
-
 
 	/**
 	 * @function addNewPair() adds a new pair either before or after
@@ -323,6 +302,29 @@ $.RegexTest = function (varieties) {
 		if (textarea === true) {
 			$('#makeTextarea' + id).is(':checked', true);
 		}
+
+
+		function activateAddButton(e) {
+			var tmpID,
+				tmpPos,
+				tmpTextArea = false;
+
+			e.preventDefault();
+
+			tmpID = $(this).data('regex');
+			tmpPos = $(this).data('pos');
+
+			console.log('about to add');
+
+			if ($('#makeTextarea' + tmpID).is('checked')) {
+				tmpTextArea = true;
+			}
+
+			addNewPair(tmpID, tmpPos, tmpTextArea);
+
+			return false;
+		}
+
 
 		$('#addBefore' + id).on('click', activateAddButton);
 		$('#addAfter' + id).on('click', activateAddButton);
@@ -403,8 +405,8 @@ $.RegexTest = function (varieties) {
 
 			if ($(splitSample).is(':checked') && $(sampleDelim).val() !== '') {
 				// break up sample
-				splitSampleDo === true;
-				splitSampleChar = $(sampleDelim).val()
+				splitSampleDo = true;
+				splitSampleChar = $(sampleDelim).val();
 				parsedSample = parsedSample[0].split(new RegExp(splitSampleChar, 'g'));
 			}
 
@@ -623,7 +625,7 @@ $.RegexTest = function (varieties) {
 			output = output.replace(/(^.*?class="[^"]+)/, '$1 error');
 			matches ='<p class="error-message">' + HTMLencode(regex.regex.error.message) + '</p>';
 			if (regex.regex.error.formatted !== undefined) {
-				find = regex.regex.error.formatted
+				find = regex.regex.error.formatted''
 			}
 		} else if (regex.matched === false) {
 			matches = '<p class="no-match">Nothing was matched</p>';
@@ -632,7 +634,7 @@ $.RegexTest = function (varieties) {
 			for (a = 0; a < regex.matches.length; a += 1) {
 				matches += renderMatchBlock(regex.matches[a]);
 			}
-			matches += '\n\t\t\t\t\t\t\t\t</ol>\n'
+			matches += '\n\t\t\t\t\t\t\t\t</ol>\n''
 		}
 		output = output.replace('{{REGEX_FIND}}', regex.regex.find);
 		output = output.replace('{{REGEX_MODIFIERS}}', HTMLencode(regex.regex.modifiers));
@@ -747,7 +749,6 @@ $.RegexTest = function (varieties) {
 
 	this.validateRegex = function (id) {
 		var jsonObject = buildJSONobject();
-
 	};
 
 

@@ -42,7 +42,7 @@ $.RegexDoerLocal = function (doXregexp) {
 		};
 		mode = 'xRegExp';
 	} else {
-		 RegexAdapter = function () {
+		RegexAdapter = function () {
 			this.tryRegExp = function (regex, modifiers) {
 				var output;
 				try {
@@ -243,7 +243,7 @@ console.log('allRegexes: ', allRegexes);
 			output.samples.push(jsonObj.sample[a]);
 		}
 		return output;
-	}
+	};
 
 
 	this.setEngine = function (regexEngineObj) {
