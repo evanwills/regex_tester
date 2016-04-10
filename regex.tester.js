@@ -54,6 +54,13 @@ $.RegexTest = function (varieties) {
 	}
 
 
+	function HTMLencode(input) {
+		var el = document.createElement("div");
+		el.innerText = el.textContent = input;
+		return el.innerHTML;
+	}
+
+
 	function setRenderWSfunc(e) {
 		if ($(e.target).val() === 1) {
 			doRenderWS = function (input) {
@@ -67,20 +74,20 @@ $.RegexTest = function (varieties) {
 				}
 
 				find.push(new RegExp(' ', 'g'));
-				replace.push('<span class="spc">[space]</space>');
+				replace.push('[[[space]]]');
 				find.push(new RegExp("\n", 'g'));
-				replace.push('<span class="spc">[new line]</space>');
+				replace.push('[[[new line]]]\n');
 				find.push(new RegExp("\r", 'g'));
-				replace.push('<span class="spc">[return]</space>');
+				replace.push('[[[return]]]\r');
 				find.push(new RegExp("\l", 'g'));
-				replace.push('<span class="spc">[line feed]</space>');
+				replace.push('[[[line feed]]]\l');
 				find.push(new RegExp("\t", 'g'));
-				replace.push('<span class="spc">[tab]</space>');
+				replace.push('[[[tab]]]\t');
 
 				for (a = 0; a < find.length; a += 1) {
-					input = input.replace(find[a], replace[a]);
+					input = HTMLencode(input.replace(find[a], replace[a]));
 				}
-				return input;
+				return input.replace(/\[\[(\[(?:space|new line|return|line feed|tab)\])\]\]/g, '<span class="spc">$1</span>');
 			};
 		} else {
 			doRenderWS = function (input) { return input; };
@@ -534,14 +541,6 @@ $.RegexTest = function (varieties) {
 		return false;
 	}
 
-
-	function HTMLencode(input) {
-		var el = document.createElement("div");
-		el.innerText = el.textContent = input;
-		return el.innerHTML;
-	}
-
-
 	function mergeRegexSamples(samples, regexes, regexErrors) {
 		var a = 0,
 			b = 0,
@@ -600,13 +599,13 @@ $.RegexTest = function (varieties) {
 
 	function renderMatchBlock(matches) {
 		var a = 0,
-			output = $('#match-sample-item').html().replace('{{MATCH_0}}', matches.wholeMatch.substr(0, state.maxLenMatch)),
+			output = $('#match-sample-item').html().replace('{{MATCH_0}}', doRenderWS(matches.wholeMatch.substr(0, state.maxLenMatch))),
 			subpatterns = '';
 
 		if (matches.subPatterns.length > 0) {
 			subpatterns = '\n\t\t\t\t\t\t\t\t\t\t<ol class="match-subpatterns">';
 			for (a = 0; a < matches.subPatterns.length; a += 1) {
-				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + HTMLencode(matches.subPatterns[a].substr(0, state.maxLenMatch)) + '</li>';
+				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + doRenderWS(matches.subPatterns[a].substr(0, state.maxLenMatch)) + '</li>';
 			}
 			subpatterns += '\n\t\t\t\t\t\t\t\t\t\t</ol>\n';
 		}
@@ -625,7 +624,7 @@ $.RegexTest = function (varieties) {
 			output = output.replace(/(^.*?class="[^"]+)/, '$1 error');
 			matches ='<p class="error-message">' + HTMLencode(regex.regex.error.message) + '</p>';
 			if (regex.regex.error.formatted !== undefined) {
-				find = regex.regex.error.formatted''
+				find = regex.regex.error.formatted;
 			}
 		} else if (regex.matched === false) {
 			matches = '<p class="no-match">Nothing was matched</p>';
@@ -634,7 +633,7 @@ $.RegexTest = function (varieties) {
 			for (a = 0; a < regex.matches.length; a += 1) {
 				matches += renderMatchBlock(regex.matches[a]);
 			}
-			matches += '\n\t\t\t\t\t\t\t\t</ol>\n''
+			matches += '\n\t\t\t\t\t\t\t\t</ol>\n';
 		}
 		output = output.replace('{{REGEX_FIND}}', regex.regex.find);
 		output = output.replace('{{REGEX_MODIFIERS}}', HTMLencode(regex.regex.modifiers));
@@ -707,7 +706,7 @@ $.RegexTest = function (varieties) {
 					char = splitSampleChar;
 			}
 			for (a = 0; a < input.samples.length; a += 1) {
-				input.samples[a] = HTMLencode(input.samples[a]);
+				input.samples[a] = doRenderWS(input.samples[a]);
 			}
 			output = input.samples.join(char);
 			if ($('#output-tab-btn').hasClass('hide')) {
