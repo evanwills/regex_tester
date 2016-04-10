@@ -31,6 +31,9 @@ $.RegexTest = function (varieties) {
 		sampleDelim = '#split_delim',
 		sampleField = '#sample',
 		splitSample = '#split_sample',
+		splitSampleDo = false,
+		splitSampleChar = "\n",
+		state = {maxLenMatch: 300, maxLenSamp: 300},
 		workingEngine,
 		wsAction = 'input[name="ws_action"]',
 		renderWs = 'input[name="render_ws"]',
@@ -222,6 +225,10 @@ $.RegexTest = function (varieties) {
 		});
 	}
 
+	function disableAddRemove(doBool) {
+		$('.add-pairs').attr('disabled', doBool);
+		$('.remove-pairs').attr('disabled', doBool);
+	}
 
 	/**
 	 * @function removePair() removes a regexPair block (and
@@ -232,7 +239,7 @@ $.RegexTest = function (varieties) {
 	function removePair(id) {
 		var a = 0,
 			tmpNewID = 0;
-
+		disableAddRemove(true);
 		$('#addBefore' + id).off('click');
 		$('#addAfter' + id).off('click');
 		$('#remove' + id).off('click');
@@ -243,6 +250,30 @@ $.RegexTest = function (varieties) {
 		console.log('$(#regexes-pairs li).length', $('#regexes-pairs li').length);
 		console.log((id + 1) <= $('#regexes-pairs li').length);
 		updatePairs();
+
+		disableAddRemove(false);
+	}
+
+
+	function activateAddButton(e) {
+		var tmpID,
+			tmpPos,
+			tmpTextArea = false;
+
+		e.preventDefault();
+
+		tmpID = $(this).data('regex');
+		tmpPos = $(this).data('pos');
+
+		console.log('about to add');
+
+		if ($('#makeTextarea' + tmpID).is('checked')) {
+			tmpTextArea = true;
+		}
+
+		addNewPair(tmpID, tmpPos, tmpTextArea);
+
+		return false;
 	}
 
 
@@ -253,11 +284,14 @@ $.RegexTest = function (varieties) {
 	 * @var [int] id ID of regexPair block to be removed
 	 * @var [str] pos Position to add ('before' or 'after')
 	 */
+	// TODO break this function up into
 	function addNewPair(id, pos) {
 		var a = 0,
 			nextID,
 			tmpPair,
 			textarea = false;
+
+		disableAddRemove(true);
 
 		textarea = $('#makeTextarea' + id).is(':checked');
 
@@ -288,27 +322,6 @@ $.RegexTest = function (varieties) {
 
 		if (textarea === true) {
 			$('#makeTextarea' + id).is(':checked', true);
-		}
-
-		function activateAddButton(e) {
-			var tmpID,
-				tmpPos,
-				tmpTextArea = false;
-
-			e.preventDefault();
-
-			tmpID = $(this).data('regex');
-			tmpPos = $(this).data('pos');
-
-			console.log('about to add');
-
-			if ($('#makeTextarea' + tmpID).is('checked')) {
-				tmpTextArea = true;
-			}
-
-			addNewPair(tmpID, tmpPos, tmpTextArea);
-
-			return false;
 		}
 
 		$('#addBefore' + id).on('click', activateAddButton);
@@ -343,6 +356,8 @@ $.RegexTest = function (varieties) {
 		}
 
 		$('#regexp' + id).data('regex', id);
+
+		disableAddRemove(false);
 	}
 
 
@@ -388,7 +403,9 @@ $.RegexTest = function (varieties) {
 
 			if ($(splitSample).is(':checked') && $(sampleDelim).val() !== '') {
 				// break up sample
-				parsedSample = parsedSample[0].split(new RegExp($(sampleDelim).val(), 'g'));
+				splitSampleDo === true;
+				splitSampleChar = $(sampleDelim).val()
+				parsedSample = parsedSample[0].split(new RegExp(splitSampleChar, 'g'));
 			}
 
 			trimSampleOutput = false;
@@ -483,6 +500,8 @@ $.RegexTest = function (varieties) {
 
 		jsonObj.sampResultLen = ($(maxLenSamp).val() * 1);
 		jsonObj.matchResultLen = ($(maxLenMatch).val() * 1);
+		state.maxLenMatch = jsonObj.matchResultLen;
+		state.maxLenSamp = jsonObj.sampResultLen;
 
 		trimSampleOutput = jsonObj.trimOutput;
 
@@ -492,33 +511,215 @@ $.RegexTest = function (varieties) {
 
 
 	function renderProblemRegex(regexErrors) {
-
+		var a = 0,
+			innerHTML = '',
+			tmpSelector = '';
+		if (regexErrors.length > 0) {
+			for (a = 0; a < regexErrors.length; a += 1) {
+				tmpSelector = '#regexp' + regexErrors[a].regexID;
+				if (regexErrors[a] === undefined || typeof regexErrors[a].message !== 'string' || typeof regexErrors[a].regexID !== 'number') {
+					throw {'message': 'renderProblemRegex() expects only parameter regexErrors to be an array of objects that have a string propert "message" and a number property "regexID"'};
+				}
+				if ($(tmpSelector).hasClass('regex-error') === true) {
+					$(tmpSelector + ' .error-msg').html(regexErrors[a].message);
+				} else {
+					$(tmpSelector).addClass('regex-error');
+					$(tmpSelector).prepend('<span class="error-msg">' + regexErrors[a].message + '</span>');
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 
-	function HtmlEncode(input) {
+	function HTMLencode(input) {
 		var el = document.createElement("div");
 		el.innerText = el.textContent = input;
 		return el.innerHTML;
 	}
 
 
-	function renderReturn(input, jsonObj) {
-		var a = 0;
-		console.log('inside renderReturn()');
-		console.log('input: ', input);
-		console.log('jsonObj: ', jsonObj);
+	function mergeRegexSamples(samples, regexes, regexErrors) {
+		var a = 0,
+			b = 0,
+			regexID = 0,
+			regexErrIndex = false,
+			tmpSelector = '';
+
+		for (a = 0; a < regexErrors.length; a += 1) {
+			regexID = regexErrors[a].regexID;
+
+			if (regexes[regexID] === undefined || regexes[regexID].id !== regexID) {
+				for (b = 0; b < regexes.length; b += 1) {
+					if (regexes[b].id === regexID) {
+						regexID = regexes[b].id
+					}
+				}
+			}
+
+			if (regexErrors[a].patternParts !== undefined) {
+				regexErrors[a].formatted = '';
+				if (regexErrors[a].patternParts.good !== undefined && regexErrors[a].patternParts.good !== '') {
+					regexErrors[a].formatted += '<span class="regex-part-good">' + HTMLencode(regexErrors[a].patternParts.good) + '</span>';
+				}
+				if (regexErrors[a].patternParts.problem !== undefined && regexErrors[a].patternParts.problem !== '') {
+					regexErrors[a].formatted += '<span class="regex-part-problem">' + HTMLencode(regexErrors[a].patternParts.problem) + '</span>';
+				}
+				if (regexErrors[a].patternParts.bad !== undefined && regexErrors[a].patternParts.bad !== '') {
+					regexErrors[a].formatted += '<span class="regex-part-bad">' + HTMLencode(regexErrors[a].patternParts.bad) + '</span>';
+				}
+			}
+
+			regexes[regexID].ok = false;
+			regexes[regexID].error = regexErrors[a];
+
+			tmpSelector = '#regexp' + regexID;
+			if ($(tmpSelector).hasClass('regex-error') === true) {
+				$(tmpSelector + ' .error-msg').html(regexErrors[a].message);
+			} else {
+				$(tmpSelector).addClass('regex-error');
+				$(tmpSelector).prepend('<span class="error-msg">' + regexErrors[a].message + '</span>');
+			}
+		}
+
+		for (a = 0; a < samples.length; a += 1) {
+			if (samples[a].sampleMatches === undefined) {
+				break;
+			}
+			for (b = 0; b < samples[a].sampleMatches.length; b += 1) {
+				regexID = samples[a].sampleMatches[b].regexID;
+				samples[a].sampleMatches[b].regex = regexes[regexID];
+			}
+		}
+		return samples;
+	}
+
+
+	function renderMatchBlock(matches) {
+		var a = 0,
+			output = $('#match-sample-item').html().replace('{{MATCH_0}}', matches.wholeMatch.substr(0, state.maxLenMatch)),
+			subpatterns = '';
+
+		if (matches.subPatterns.length > 0) {
+			subpatterns = '\n\t\t\t\t\t\t\t\t\t\t<ol class="match-subpatterns">';
+			for (a = 0; a < matches.subPatterns.length; a += 1) {
+				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + HTMLencode(matches.subPatterns[a].substr(0, state.maxLenMatch)) + '</li>';
+			}
+			subpatterns += '\n\t\t\t\t\t\t\t\t\t\t</ol>\n';
+		}
+
+		return output.replace('{{SUBPATTERNS}}', subpatterns);
+	}
+
+
+	function renderRegexBlock(regex) {
+		var a = 0,
+			find = HTMLencode(regex.regex.find),
+			output = $('#match-regex').html(),
+			matches = '';
+
+		if (regex.ok === false) {
+			output = output.replace(/(^.*?class="[^"]+)/, '$1 error');
+			matches ='<p class="error-message">' + HTMLencode(regex.regex.error.message) + '</p>';
+			if (regex.regex.error.formatted !== undefined) {
+				find = regex.regex.error.formatted
+			}
+		} else if (regex.matched === false) {
+			matches = '<p class="no-match">Nothing was matched</p>';
+		} else {
+			matches = '\n\t\t\t\t\t\t\t\t<ol class="match-match">\n';
+			for (a = 0; a < regex.matches.length; a += 1) {
+				matches += renderMatchBlock(regex.matches[a]);
+			}
+			matches += '\n\t\t\t\t\t\t\t\t</ol>\n'
+		}
+		output = output.replace('{{REGEX_FIND}}', regex.regex.find);
+		output = output.replace('{{REGEX_MODIFIERS}}', HTMLencode(regex.regex.modifiers));
+		output = output.replace('{{REGEX_REPLACE}}', HTMLencode(regex.regex.replace));
+		output = output.replace('{{MATCH_MATCH}}', matches);
+
+		//for (a = 0; a < )
+
+		return output;
+	}
+
+
+	function renderSampleBlock(sampleStr, sampleMatches) {
+		var a = 0,
+			output = '',
+			regexes = '',
+			sep = '';
+
+		for (a = 0; a < sampleMatches.length; a += 1) {
+			regexes += renderRegexBlock(sampleMatches[a]);
+		}
+		output = $('#match-sample').html().replace('{{SAMPLE}}', sampleStr.substr(0, state.maxLenSamp));
+		output = output.replace('{{MATCH_REGEX}}', regexes);
+		return output;
+	}
+
+
+	function renderReturn(input, jsonObj, splitSample) {
+		var a = 0,
+			b = 0,
+			char = '',
+			msg = '',
+			output,
+			sep = '';
 
 		if (typeof input !== 'object' && typeof input.doReplace === 'boolean' && typeof input.message === 'string' && input.regexErrors !== undefined && input.samples !== undefined && typeof input.success === 'boolean') {
-			console.warn('renderReturn() expects first parameter [input] to be an object containing with the following properties: doReplace, message, regexErrors, samples & success');
-			throw {'message': 'renderReturn() expects first parameter [input] to be an object containing with the following properties: doReplace, message, regexErrors, samples & success'};
+			msg = 'renderReturn() expects first parameter [input] to be an object containing with the following properties: doReplace, message, regexErrors, samples & success';
+			console.warn(msg);
+			throw {'message': msg};
 		}
 
-		renderProblemRegex(input.regexErrors);
+		input.samples = mergeRegexSamples(input.samples, jsonObj.regexPairs, input.regexErrors);
 
-		for (a = 0; a < input.samples; a += 1) {
-			a = 100;
+		if (input.doReplace === false) {
+			$('#matches .wrapper').html('');
+			for (a = 0; a < input.samples.length; a += 1) {
+				$('#matches .wrapper').append(renderSampleBlock(jsonObj.sample[input.samples[a].sampleID], input.samples[a].sampleMatches));
+			}
+
+			if ($('#matches-tab-btn').hasClass('hide')) {
+				$('#matches-tab-btn').removeClass('hide');
+				$('#matches').removeClass('hide');
+			}
+			$('#matches-tab-btn a').tab('show');
+		} else {
+			switch (splitSampleChar) {
+				case '\\n':
+					char = "\n";
+					break;
+				case '\\r':
+					char = "\r";
+					break;
+				case '\\r\\n':
+					char = "\r\n";
+					break;
+				case '\\t':
+					char = "\t";
+					break;
+				default:
+					char = splitSampleChar;
+			}
+			for (a = 0; a < input.samples.length; a += 1) {
+				input.samples[a] = HTMLencode(input.samples[a]);
+			}
+			output = input.samples.join(char);
+			if ($('#output-tab-btn').hasClass('hide')) {
+				$('#output-tab-btn').removeClass('hide');
+				$('#output').removeClass('hide');
+			}
+			$('#outputContent').html(output);
+			if (input.regexErrors.length > 0) {
+				$('#regex-tab-btn a').tab('show');
+			} else {
+				$('#output-tab-btn a').tab('show');
+			}
 		}
+
 	}
 
 
@@ -537,7 +738,6 @@ $.RegexTest = function (varieties) {
 				renderReturn(returnObj, jsonObject);
 			} else {
 				console.log('test regex');
-				console.log(regexDoer);
 				returnObj = regexDoer.testRegex(jsonObject);
 				renderReturn(returnObj, jsonObject);
 			}

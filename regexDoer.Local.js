@@ -17,6 +17,7 @@ if (typeof window.console !== 'object') {
 $.RegexDoerLocal = function (doXregexp) {
 	"use strict";
 	var engine,
+		regexAdapter,
 		RegexAdapter,
 		mode = 'standard';
 
@@ -28,7 +29,7 @@ $.RegexDoerLocal = function (doXregexp) {
 					output = new XRegExp(regex, modifiers);
 				} catch (e) {
 					console.warn(e);
-					throw e.message;
+					throw {'message': e.message};
 				}
 				return output;
 			};
@@ -41,14 +42,14 @@ $.RegexDoerLocal = function (doXregexp) {
 		};
 		mode = 'xRegExp';
 	} else {
-		RegexAdapter = function () {
+		 RegexAdapter = function () {
 			this.tryRegExp = function (regex, modifiers) {
 				var output;
 				try {
 					output = new RegExp(regex, modifiers);
 				} catch (e) {
 					console.warn(e);
-					throw e.message;
+					throw {'message': e.message};
 				}
 				return output;
 			};
@@ -60,6 +61,8 @@ $.RegexDoerLocal = function (doXregexp) {
 			};
 		};
 	}
+
+	regexAdapter = new RegexAdapter();
 
 	/**
 	 * handles actual applying of regex to sample
@@ -83,7 +86,7 @@ $.RegexDoerLocal = function (doXregexp) {
 			tmpResult = {'wholeMatch': '', 'subPatterns': []};
 
         if (regexObj.ok === true) {
-            tmpMatch = RegexAdapter.match(regexObj.regexp, sample);
+            tmpMatch = regexAdapter.match(regexObj.regexp, sample);
             if (tmpMatch.length !== null) {
                 output.matched = true;
                 if (regexObj.isGlobal) {
@@ -132,7 +135,7 @@ $.RegexDoerLocal = function (doXregexp) {
 				tmp = processRegex(regexObjs[a].parsed, sample);
 				tmpResult.matches = tmp.result;
 				tmpResult.matched = tmp.matched;
-				sample = RegexAdapter.replace(regexObjs[a].parsed.regexp, regexObjs[a].replace, sample);
+				sample = regexAdapter.replace(regexObjs[a].parsed.regexp, regexObjs[a].replace, sample);
 			} else {
 				tmpResult.ok = false;
 			}
@@ -158,8 +161,7 @@ $.RegexDoerLocal = function (doXregexp) {
 		}
 
 		try {
-			console.log(RegexAdapter);
-			output.regexp = RegexAdapter.tryRegExp(regex, modifiers);
+			output.regexp = regexAdapter.tryRegExp(regex, modifiers);
 		} catch (e) {
 			output.errorMsg = e.message;
 			output.ok = false;
@@ -170,6 +172,22 @@ $.RegexDoerLocal = function (doXregexp) {
 		return output;
 	};
 
+	function testAllRegexes(allRegexes, parent) {
+		var a = 0,
+			output = [];
+console.log('allRegexes: ', allRegexes);
+		for (a = 0; a < allRegexes.length; a += 1) {
+            allRegexes[a].parsed = parent.validateRegex(allRegexes[a].find, allRegexes[a].modifiers);
+			if (allRegexes[a].parsed.ok === false) {
+				output.push({
+					'regexID': allRegexes[a].id,
+					'message': allRegexes[a].parsed.errorMsg
+				});
+			}
+        }
+		console.log({'regexPairs': allRegexes, 'regexErrors': output});
+		return {'regexPairs': allRegexes, 'regexErrors': output};
+	}
 
 	this.testRegex = function (jsonObj) {
 		var a = 0,
@@ -181,30 +199,51 @@ $.RegexDoerLocal = function (doXregexp) {
 				'samples': [],
 				'success': true
 			},
-			regexAdapter = new RegexAdapter(),
+			tmp,
 			tmpResult,
 			tmpRegex;
 
 
 		console.log('inside RegexDoerLocal::testRegex() (in ' + mode + ' mode)');
 
-		for (a = 0; a < jsonObj.regexPairs.length; a += 1) {
-            jsonObj.regexPairs[a].parsed = this.validateRegex(jsonObj.regexPairs[a].find, jsonObj.regexPairs[a].modifiers);
-			if (jsonObj.regexPairs[a].parsed.ok === false) {
-				output.regexErrors.push({
-					'regexID': jsonObj.regexPairs[a].id,
-					'message': jsonObj.regexPairs[a].parsed.errorMsg
-				});
-			}
-        }
+		tmp = testAllRegexes(jsonObj.regexPairs, this);
+		jsonObj.regexPairs = tmp.regexPairs;
+		output.regexErrors = tmp.regexErrors;
 
         for (a = 0; a < jsonObj.sample.length; a += 1) {
-			output.samples.push({'sampleID': a, 'sampleMatches': processSample(jsonObj.regexPairs, jsonObj.sample[a], regexAdapter)});
+			output.samples.push({'sampleID': a, 'sampleMatches': processSample(jsonObj.regexPairs, jsonObj.sample[a])});
 		}
-
 		return output;
 	};
 
+
+	this.findReplace = function (jsonObj) {
+		var a = 0,
+			b = 0,
+            output = {
+				'doReplace': jsonObj.doReplace,
+				'message': '',
+				'regexErrors': [],
+				'samples': [],
+				'success': true
+			},
+			tmp;
+		console.log('inside RegexDoerLocal::testRegex() (in ' + mode + ' mode)');
+
+		tmp = testAllRegexes(jsonObj.regexPairs, this);
+		jsonObj.regexPairs = tmp.regexPairs;
+		output.regexErrors = tmp.regexErrors;
+
+        for (a = 0; a < jsonObj.sample.length; a += 1) {
+			for (b = 0; b < jsonObj.regexPairs.length; b += 1) {
+				if (jsonObj.regexPairs[b].parsed.ok === true) {
+					jsonObj.sample[a] = jsonObj.sample[a].replace(jsonObj.regexPairs[b].find, jsonObj.regexPairs[b].replace);
+				}
+			}
+			output.samples.push(jsonObj.sample[a]);
+		}
+		return output;
+	}
 
 
 	this.setEngine = function (regexEngineObj) {

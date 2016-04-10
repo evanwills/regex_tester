@@ -15,9 +15,9 @@
 		<form id="regex" method="post" action="/js_regex_tester/">
 			<ul class="nav nav-tabs">
 				<li><a href="#input" data-toggle="tab">Input</a></li>
-				<li class="active"><a href="#regexes" data-toggle="tab">Regex</a></li>
-				<li><a href="#matches" data-toggle="tab">Matches</a></li>
-				<li><a href="#output" data-toggle="tab">Output</a></li>
+				<li id="regex-tab-btn" class="active"><a href="#regexes" data-toggle="tab">Regex</a></li>
+				<li id="matches-tab-btn" class="hide"><a href="#matches" data-toggle="tab">Matches</a></li>
+				<li id="output-tab-btn" class="hide"><a href="#output" data-toggle="tab">Output</a></li>
 
 				<li><a href="#settings" data-toggle="tab">Settings</a></li>
 			</ul>
@@ -87,6 +87,21 @@
 				</fieldset>
 
 
+				<div id="matches" class="tab-pane fade hide">
+					<h2>Result of regex matching</h2>
+
+					<div class="wrapper"></div>
+				</div>
+
+
+				<fieldset id="output" class="tab-pane fade hide">
+					<legend><label for="outputContent">Output of regex find &amp; replaces</label></legend>
+
+
+					<textarea id="outputContent" name="outputContent" readonly="readonly"></textarea>
+				</fieldset>
+
+
 
 
 				<fieldset id="settings" class="tab-pane fade">
@@ -143,35 +158,6 @@
 						</ul>
 					</div>
 				</fieldset>
-
-				<div id="matches" class="tab-pane fade">
-					<h2>Result of regex matching</h2>
-
-					<div class="match-sample">
-						<pre><code>{{SAMPLE}}</code></pre>
-						<ol>
-							<li>
-								<pre><code>{{REGEX}}</code></pre>
-								<ol>
-									<li>
-										<div class="whole-match">{{MATCH_0}}</div>
-										<ol>
-											<li>{{MATCH_PART}}</li>
-											<li>{{MATCH_PART}}</li>
-											<li>{{MATCH_PART}}</li>
-										</ol>
-									</li>
-								</ol>
-							</li>
-						</ol>
-					</div>
-				</div>
-
-				<div id="output" class="tab-pane fade">
-					<h2>Output of regex find &amp; replaces</h2>
-
-					<textarea id="outputContent" name="outputContent" readonly="readonly">This is the output</textarea>
-				</div>
 			</div>
 
 			<fieldset id="butt">
@@ -214,15 +200,15 @@
 								</span>
 								<span class="col-xs-12 col-sm-6 add-remove">
 									<!-- <label for="addBefore{{ID}}"> -->
-										<button id="addBefore{{ID}}" class="btn btn-info btn-before" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
+										<button id="addBefore{{ID}}" class="btn btn-info btn-before add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
 									<!-- </label> -->
 
 									<!-- <label for="remove{{ID}}"> -->
-										<button id="remove{{ID}}" class="btn btn-warning" data-regex="{{ID}}"><span class="glyphicon glyphicon-minu"></span> Remove <span class="sr-only">this find/replace pair {{ITEM}}</span></button>
+										<button id="remove{{ID}}" class="btn btn-warning remove-pairs" data-regex="{{ID}}"><span class="glyphicon glyphicon-minu"></span> Remove <span class="sr-only">this find/replace pair {{ITEM}}</span></button>
 									<!-- </label> -->
 
 									<!-- <label for="addAfter{{ID}}"> -->
-										<button id="addAfter{{ID}}" class="btn btn-info btn-after" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
+										<button id="addAfter{{ID}}" class="btn btn-info btn-after add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
 									<!-- </label> -->
 
 									<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
@@ -262,16 +248,28 @@
 					<textarea id="outputContent" name="outputContent" readonly="readonly">{{outputContent}}</textarea>
 			</div>
 			<div id="match-sample-item">
+									<li>
+										<div class="whole-match">{{MATCH_0}}</div>
+										{{SUBPATTERNS}}
+									</li>
 			</div>
-			<div id="match-regex-item">
+			<div id="match-sample">
+					<div class="match-sample">
+						<pre><code>{{SAMPLE}}</code></pre>
+						<div class="match-regex">
+							{{MATCH_REGEX}}
+						</div>
+					</div>
 			</div>
-			<div id="match-match-item">
-			</div>
-			<div id="match-sample-single">
-			</div>
-			<div id="match-regex-single">
-			</div>
-			<div id="match-match-single">
+			<div id="match-regex">
+							<div class="regex-match-item">
+								<pre class="find"><code>{{REGEX_FIND}}</code></pre>
+								<pre class="modifiers"><code>{{REGEX_MODIFIERS}}</code></pre>
+								<pre class="replace"><code>{{REGEX_REPLACE}}</code></pre>
+								<ol class="match-match">
+									{{MATCH_MATCH}}
+								</ol>
+							</div>
 			</div>
 		</div>
 

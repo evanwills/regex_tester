@@ -32,6 +32,9 @@ p.note {
 li.bad-regex {
     box-shadow: 0 0 0.5em #f00;
 }
+.hide {
+	display: none; }
+}
 #regexes div:hover p {
     display: block;
 }
@@ -387,7 +390,35 @@ span.whole::after {
     border-bottom-right-radius: 1.5em;
     border-top-right-radius: 1.5em;
 }
-
+.regex-error {
+//    background-color: #fcc;
+    padding-top: 1.7em;
+}
+.regex-error .find {
+    background-color: #fcc;
+}
+.error-msg {
+    padding: 0.65em 1.75em 0.65em 1em;
+    background-color: #f00;
+    color: #fff;
+    display: block;
+    position: relative;
+    top: -1.7em;
+}
+.error-msg:before {
+	content: 'Regex error: ';
+    color: #ff0;
+	font-weight: bold;
+}
+.match-sample {
+	border-top: 0.1em solid #ccc;
+	padding-top: 1em;
+	margin-bottom: 1em;
+}
+.match-sample:first-child {
+	border-top: none;
+	padding-top: 0%;
+}
 @media (max-width: 52em) {
 	.frInputWrap {
 		display: table;
