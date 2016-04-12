@@ -27,10 +27,12 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 		},
 		{...}
 	],
-	'sample': [],			// [array] list of strings
+	'sample': [
+		[string],
+		...
+	],			// [array] list of strings
 	'sampResultLen': 300,	// [int] > 6
 	'trimOutput': false,	// [boolean]
-	'url': false			// [boolean]
 }
 ```
 
@@ -46,22 +48,22 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 			'regexID': 0,		// [int] [required] ID of the regex that had a problem
 			'message': '',		// [string] [required]
 			'patternParts': {		// optional (if supported)
-				'good': '',		// [string] good part of the regex
-				'problem': '',	// [string] problem part of the regex
-				'bad': ''		// [string] bad part of the regex
+				'good': '',			// [string] good part of the regex
+				'problem': '',		// [string] problem part of the regex
+				'bad': ''			// [string] bad part of the regex
 			}
 		},
 		{...}
 	],
 	'samples': [
 		{
-			'sampleID': 0	// [int] ID of the sample that was matched
-			'sampeMatches': [ // [array] list of sampleMatch objects
-				{			// sampleMatch objects
-					'regexID': 0,	// [int] ID of the regex that was matched
-					'ok': true,		// [bool] was the regex OK (true if there were no errors)
-					'matched': true	// [bool] true if the regex matched anything at all
-					'matches': [	// [array] list of matches
+			'sampleID': 0			// [int] ID of the sample that was matched
+			'sampeMatches': [		// [array] list of sampleMatch objects
+				{
+					'regexID': 0,		// [int] ID of the regex that was matched
+					'ok': true,			// [bool] was the regex OK (true if there were no errors)
+					'matched': true		// [bool] true if the regex matched anything at all
+					'matches': [		// [array] list of matches
 						{
 							'wholeMatch': '',	// [string] list of the whole match
 							'subPatterns': [	// [array] list of sub-parts of the match
@@ -72,27 +74,32 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 						{...}
 
 					],
-					'seconds': 0.002 // [float] how many seconds it took to apply the regex to the sample
+					'seconds': 0.002	// [float] how many seconds it took to apply the regex to the sample
 				},
-				{...}		// sampleMatch objects
+				{...}				// sampleMatch objects
 			]
 		}
 	],
-	'success': [bool]	// whether or not there were any problems
+	'success': true,	// [boolean] whether or not there were any problems
 }
 ```
+
 #### when doReplace is TRUE:
+
 Only the find/replace output is returned.
+
+__NOTE__: If nothing was matched but there were no errors, 'matched' must be false and 'samples' should be empty (no point returning something we already have.)
+
 ``` javascript
 {
-	'doReplace': true,	// boolean
-	'matched': bool,	// whether or not anything at all was matched
-	'message': '',		// general error messages if any.
+	'doReplace': true,	// [boolean]
+	'matched': false,	// [boolean] whether or not anything at all was matched
+	'message': '',		// [string] general error messages if any.
 	'regexErrors': [
 		{
 			'regexID': 0,		// [int] [required] ID of the regex that had a problem
 			'message': '',		// [string] [required]
-			'patternParts': {		// optional (if supported)
+			'patternParts': {	// optional (if supported)
 				'good': '',		// [string] good part of the regex
 				'problem': '',	// [string] problem part of the regex
 				'bad': ''		// [string] bad part of the regex
@@ -104,11 +111,17 @@ Only the find/replace output is returned.
 		[string],
 		...
 	],
-	'success': [bool],
+	'success': true,	// [boolean]
 }
 ```
 
 ## Roadmap
 1.	Get PHP API service up and running using the base code from [preg_tester](https://github.com/evanwills/preg_test).
-2.	Remove jQuery dependancy.
 3.	Add .Net API service
+3.	Add branches for:
+	*	vanilla javascript (i.e. no jQuery or any other framework)
+	*	[Ember JS](https://emberjs.com/)
+	*	[Angular JS](https:angularjs.org/)
+	*	[Ractive JS](htt://ractivejs.org/)
+	*	[React JS](htts://facebook.github.io/react)
+4.	move jQuery version to its own branch and push vanilla javascript version to master
