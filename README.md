@@ -122,6 +122,6 @@ __NOTE__: If nothing was matched but there were no errors, 'matched' must be fal
 	*	vanilla javascript (i.e. no jQuery or any other framework)
 	*	[Ember JS](https://emberjs.com/)
 	*	[Angular JS](https:angularjs.org/)
-	*	[Ractive JS](htt://ractivejs.org/)
-	*	[React JS](htts://facebook.github.io/react)
+	*	[Ractive JS](http://ractivejs.org/)
+	*	[React JS](https://facebook.github.io/react)
 4.	move jQuery version to its own branch and push vanilla javascript version to master
