@@ -419,6 +419,37 @@ span.whole::after {
 	border-top: none;
 	padding-top: 0%;
 }
+.regex-match-item {
+	padding: 1em;
+	border: 0.1em dotted #ddd;
+}
+.match-match {
+	padding-left: 1.5em;
+}
+.match-match > li {
+	list-style-type: lower-alpha;
+	padding-left: 1em;
+}
+.whole-match:before {
+	content: 'Whole match: ';
+	font-weight: bold;
+}
+.match-subpatterns:before {
+	content: 'Sub-patterns: ';
+	display: block;
+	text-indent: -3em;
+	font-weight: bold;
+}
+pre.find {
+	background-color: #ffe;
+}
+pre.modifiers {
+	background-color: transparent;
+}
+pre.replace {
+	background-color: #eef;
+}
+
 @media (max-width: 52em) {
 	.frInputWrap {
 		display: table;

@@ -25,15 +25,21 @@ $.RegexTest = function (varieties) {
 		maxLenMatch = '#matched_len',
 		maxLenSamp = '#sample_len',
 		parsedSample = [],
-		trimSampleOutput = false,
 		regexDelim = '#regex_delim',
 		regexDoer,
 		sampleDelim = '#split_delim',
 		sampleField = '#sample',
 		splitSample = '#split_sample',
-		splitSampleDo = false,
-		splitSampleChar = "\n",
-		state = {maxLenMatch: 300, maxLenSamp: 300},
+		state = {
+			splitSampleDo: false,
+			splitSampleChar: '\n',
+			maxLenMatch: 300,
+			maxLenSamp: 300,
+			trimSample: false,
+			trimSampleOutput: false,
+			displayWhiteSpaceChars: false,
+			regexDelim: '/'
+		},
 		workingEngine,
 		wsAction = 'input[name="ws_action"]',
 		renderWs = 'input[name="render_ws"]',
@@ -412,19 +418,19 @@ $.RegexTest = function (varieties) {
 
 			if ($(splitSample).is(':checked') && $(sampleDelim).val() !== '') {
 				// break up sample
-				splitSampleDo = true;
-				splitSampleChar = $(sampleDelim).val();
-				parsedSample = parsedSample[0].split(new RegExp(splitSampleChar, 'g'));
+				state.splitSampleDo = true;
+				state.splitSampleChar = $(sampleDelim).val();
+				parsedSample = parsedSample[0].split(new RegExp(state.splitSampleChar, 'g'));
 			}
 
-			trimSampleOutput = false;
+			state.trimSampleOutput = false;
 			if ($(wsTrim).is(':checked')) {
 				if ($('#ws_trim_pos_before').is(':checked')) {
 					for (a = 0; a < parsedSample.length; a += 1) {
 						parsedSample[a] = parsedSample[a].trim();
 					}
 				} else {
-					trimSampleOutput = true;
+					state.trimSampleOutput = true;
 				}
 			}
 			sampleHasChanged(false);
@@ -485,7 +491,7 @@ $.RegexTest = function (varieties) {
 		jsonObj.delimOpen = workingEngine.getDelimOpen();
 		jsonObj.delimClose = workingEngine.getDelimClose();
 		jsonObj.url = workingEngine.getURL();
-		jsonObj.trimOutput = trimSampleOutput;
+		jsonObj.trimOutput = state.trimSampleOutput;
 		jsonObj.sample = parsedSample;
 
 		if ($('.regexPair').length > 0) {
@@ -512,7 +518,7 @@ $.RegexTest = function (varieties) {
 		state.maxLenMatch = jsonObj.matchResultLen;
 		state.maxLenSamp = jsonObj.sampResultLen;
 
-		trimSampleOutput = jsonObj.trimOutput;
+		state.trimSampleOutput = jsonObj.trimOutput;
 
 		console.log(jsonObj);
 		return jsonObj;
@@ -618,7 +624,8 @@ $.RegexTest = function (varieties) {
 		var a = 0,
 			find = HTMLencode(regex.regex.find),
 			output = $('#match-regex').html(),
-			matches = '';
+			matches = '',
+			tmp = '';
 
 		if (regex.ok === false) {
 			output = output.replace(/(^.*?class="[^"]+)/, '$1 error');
@@ -635,9 +642,20 @@ $.RegexTest = function (varieties) {
 			}
 			matches += '\n\t\t\t\t\t\t\t\t</ol>\n';
 		}
-		output = output.replace('{{REGEX_FIND}}', regex.regex.find);
-		output = output.replace('{{REGEX_MODIFIERS}}', HTMLencode(regex.regex.modifiers));
-		output = output.replace('{{REGEX_REPLACE}}', HTMLencode(regex.regex.replace));
+		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + HTMLencode(regex.regex.find) + '</code></pre>');
+		if (regex.regex.modifiers !== '') {
+			tmp = '<pre class="modifiers"><code>' + HTMLencode(regex.regex.modifiers) + '</code></pre>';
+		} else {
+			tmp = '';
+		}
+		output = output.replace('{{REGEX_MODIFIERS}}', tmp);
+		if (regex.regex.replace !== '') {
+			tmp = '<pre class="replace"><code>' + HTMLencode(regex.regex.replace) + '</code></pre>';
+		} else {
+			tmp = '';
+		}
+		output = output.replace('{{REGEX_REPLACE}}', tmp);
+
 		output = output.replace('{{MATCH_MATCH}}', matches);
 
 		//for (a = 0; a < )
@@ -689,7 +707,7 @@ $.RegexTest = function (varieties) {
 			}
 			$('#matches-tab-btn a').tab('show');
 		} else {
-			switch (splitSampleChar) {
+			switch (state.splitSampleChar) {
 				case '\\n':
 					char = "\n";
 					break;
@@ -703,7 +721,7 @@ $.RegexTest = function (varieties) {
 					char = "\t";
 					break;
 				default:
-					char = splitSampleChar;
+					char = state.splitSampleChar;
 			}
 			for (a = 0; a < input.samples.length; a += 1) {
 				input.samples[a] = doRenderWS(input.samples[a]);
