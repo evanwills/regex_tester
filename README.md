@@ -40,7 +40,6 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 #### when doReplace is FALSE:
 ``` javascript
 {
-	'doReplace': false,		// [boolean]
 	'matched': true,		// [boolean] whether or not anything at all was matched
 	'message': '',			// [string] general error messages if any (e.g. "server error", "page not found")
 	'regexErrors': [
@@ -92,7 +91,6 @@ __NOTE__: If nothing was matched but there were no errors, 'matched' must be fal
 
 ``` javascript
 {
-	'doReplace': true,	// [boolean]
 	'matched': false,	// [boolean] whether or not anything at all was matched
 	'message': '',		// [string] general error messages if any.
 	'regexErrors': [
