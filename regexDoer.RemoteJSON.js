@@ -15,12 +15,33 @@ if (typeof window.console !== 'object') {
 
 $.RegexDoerJsonAjax = function () {
 	"use strict";
-	var engine;
+
+	var engine,
+		output;
+
+
+
 	this.findReplace = function (input) {
+		var AJAXurl = '';
+
+		AJAXurl = '?json=' + output.toJson() + '&jquery=true&callback=?';
+
+		$('#loadingText').html('Loading. Please wait...');
+
+		$.ajax({
+			'url': AJAXurl,
+			'dataType': engine.getURL(),
+			'error': on_error,
+			'success': on_success
+		});
+	};
+
+	this.testRegex = function (input) {
 		var jsonObj = input.toJson();
 	};
-	this.testRegex = function (input) {};
+
 	this.validateRegex = function (regex, modifiers, delim) {};
+
 	this.setEngine = function (input, delim) {
 		engine = input;
 		try {
@@ -29,6 +50,11 @@ $.RegexDoerJsonAjax = function () {
 			console.log(e);
 		}
 	};
+
+	this.setOutput = function (jsonObj) {
+		output = jsonObj;
+	}
+
 	this.validateDelim = function (input) {
 		return engine.validateDelim(input);
 	};
