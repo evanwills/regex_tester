@@ -76,7 +76,7 @@ class micro_time_bc extends micro_time
 class micro_time_gmp extends micro_time
 {
 /**
- * @method mt_subtract() retuns the time difference between two
+ * @method mt_subtract() returns the time difference between two
  * microtime results
  *
  * Because of PHPs rounding off of floats when you're finding the
