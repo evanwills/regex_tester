@@ -19,7 +19,7 @@ $(document).ready(function () {
 	regexVarieties.push(new $.RegexEngine({
 		'name': 'PHP PCRE',
 		'modifiers': 'imsxeADSXUJu',
-		'URL': 'http://192.168.1.128/js_regex_tester/',
+		'URL': 'http://localhost/regex_tester/PHP/regex_tester.json.api.php',
 		'format': 'json', // json | xml
 		'delim': '`'
 		// 'validDelims': '/{}[]()<>`~!| // white list of valid regular expression delimiters. Is put into a regex like so: '^[' + validDelims + ']$'
