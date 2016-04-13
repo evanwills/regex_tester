@@ -75,6 +75,10 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 					],
 					'seconds': 0.002	// [float] how many seconds it took to apply the regex to the sample
 				},
+				{ // regex has errors
+					'regexID': 0,		// [int] ID of the regex that was matched
+					'ok': false,		// [bool] was the regex OK (true if there were no errors)
+				},
 				{...}				// sampleMatch objects
 			]
 		}
