@@ -67,6 +67,7 @@ if(!function_exists('debug'))
 
 require_once('micro_time.class.php');
 require_once('regex_tester.class.php');
+require_once('regex_tester_aggregator.class.php');
 
 if( isset($_REQUEST['jquery']) && isset($_REQUEST['callback'] ) )
 {
@@ -84,65 +85,14 @@ if( !isset($_POST['json']) || !is_string($_POST['json']) || '' === trim($_POST['
 	exit;
 }
 
-$json = json_decode($_POST['json']);
-//debug($json);
+$aggregator = new regex_tester_aggregator($_POST['json']);
 
-$output = array(
-	'matched' => false,
-	'message' => regex_tester::set_delim($json->delimOpen, $json->delimClose),
-	'regexErrors' => array(),
-	'samples' => array(),
-	'success' => true
-);
-
-$regex_pairs = array();
-$has_errors = false;
-for( $a = 0 ; $a < count($json->regexPairs) ; $a += 1 )
+if( $aggregator->all_good() === true )
 {
-	$tmp = regex_tester::get_obj($json->regexPairs[$a], $json->doReplace);
-
-	$regex_pairs[] = $tmp;
-	if( $tmp->has_errors() )
-	{
-		$output['regexErrors'][] = $tmp->get_errors();
-		$has_errors = true;
-	}
+	$aggregator->validate_regexes();
+	$aggregator->process_samples();
 }
 
-$matched = false;
-for( $a = 0 ; $a < count($json->sample) ; $a += 1 )
-{
-	$tmp = array( 'sampleID' => $a, 'sampleMatches' => array() );
-
-	for( $b = 0 ; $b < count($regex_pairs) ; $b += 1 )
-	{
-		$tmp_inner = $regex_pairs[$a]->process($json->sample[$a]);
-		$tmp['sampleMatches'][] = $tmp_inner['output'];
-		$json->sample[$a] = $tmp_inner['sample'];
-		if( $matched === false )
-		{
-			$matched = $regex_pairs[$a]->something_matched();
-		}
-	}
-	if( $json->doReplace === true )
-	{
-		$tmp['sampleMatches'] = array($json->sample[$a]);
-	}
-	$output['samples'][] = $tmp;
-}
-
-
-if( $matched === true )
-{
-	$output['matched'] = 'true';
-}
-else
-{
-	$output['samples'] = array();
-	$output['matched'] = 'false';
-}
-
-
-
-
-echo $open.json_encode($output).$close;
+echo $open;
+echo json_encode($aggregator->get_output());
+echo $close;

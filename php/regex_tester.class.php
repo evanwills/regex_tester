@@ -13,6 +13,8 @@ class regex_tester {
 
 	static protected $delim_open = '`';
 	static protected $delim_close = '`';
+	static protected $match_len = 300;
+	static protected $sample_len = 300;
 
 	/**
 	 * @private
@@ -77,7 +79,7 @@ class regex_tester {
 
 	/**
 	 * @function something_matched() whether or not this regex matched
-	 *			 anything in any sample tested.
+	 * anything in any sample tested.
 	 * @return [boolean] TRUE if something was matched, FALSE otherwise
 	 */
 	public function something_matched()
@@ -91,21 +93,16 @@ class regex_tester {
 	 * type of regex_tester object based on whether the regex was
 	 * valid and whether the user wanted to match or replace sample.
 	 *
-	 * @param  [std_obj] $regex_pair		individual regex pair
-	 *										object from output of
-	 *										json_decode supplied in
-	 *										request
+	 * @param  [std_obj] $regex_pair  individual regex pair oject
+	 *                                from output of json_decode
+	 *                                supplied in request
 	 * @param  [boolean] [$do_replace = false] whether or not user
-	 *										want to match or replace
+	 *                                want to match or replace
 	 * @return [regex_tester] regex_tester_match, regex_tester_replace
-	 *										or regex_tester_error object
+	 *                                or regex_tester_error object
 	 */
 	public static function get_obj( $regex_pair, $do_replace = false )
 	{
-		if( self::$handle_errors === null )
-		{
-			self::$handle_errors = new handle_php_errors();
-		}
 
 		$error_message = '';
 		if( !is_numeric($regex_pair->id) && !is_string($regex_pair->id) )
@@ -206,22 +203,63 @@ class regex_tester {
 	/**
 	 * @function set_delim() tests and sets open and close delimiters
 	 * for regular expression.
+	 * @param [string] $delim single non-alpha-numeric, non-white-space character
+	 * @param [string] $which ['open' or 'close']
+	 */
+	static public function set_delim($delim,$which)
+	{
+		if( $which !== 'open')
+		{
+			$which = 'close';
+		}
+
+		if( is_string($delim) && strlen($delim) === 1 && preg_match('`^[^a-z0-9\s]$`', $delim) )
+		{
+			$var = 'delim_'.$which;
+			self::$$var = $delim;
+		}
+		else
+		{
+			throw new Exception($which.' delimiter must be a single non-alpha-numeric, non-white-space character');
+		}
+		return true;
+	}
+
+	static public function validate_delim_pair()
+	{
+		if( ( self::$delim_open === '(' && self::$delim_close !== ')' ) || ( self::$delim_open === '[' && self::$delim_close !== ']' ) || ( self::$delim_open === '{' && self::$delim_close !== '}' ) || ( self::$delim_open === '[' && self::$delim_close !== ']' ) )
+		{
+			throw new Exception('You have supplied a bracket as an opening delimiter but your closing delimiter is not its mirror.');
+		}
+		elseif( self::$delim_open !==  self::$delim_close )
+		{
+			throw new Exception('Your opening and closing delimiters are not the same.');
+		}
+		return true;
+	}
+
+	/**
+	 * @function set_len() tests and sets open and close delimiters
+	 * for regular expression.
 	 * @param [string] $open  single non-alpha-numeric, non-white-space character
 	 * @param [string] $close single non-alpha-numeric, non-white-space character
 	 */
-	static public function set_delim($open,$close)
+	static public function set_len($len,$which)
 	{
-		$tmp = array('open','close');
-		for( $a = 0 ; $a < 2 ; $a += 1 )
+		if( $which !== 'sample' )
 		{
-			if( is_string(${$tmp[$a]}) && strlen(${$tmp[$a]}) === 1 && preg_match('`^[^a-z0-9\s]$`', ${$tmp[$a]}) )
+			$which = 'match';
+		}
+		if( $len !== false )
+		{
+			if( is_numeric($len) && $len > 6 )
 			{
-				$var = 'delim_'.$tmp[$a];
-				self::$$var = $$tmp[$a];
+				settype($len,'integer');
+				self::${$which.'_len'} = $len;
 			}
 			else
 			{
-				throw new Exception($tmp[$a].' delimiter must be a single non-alpha-numeric, non-white-space character');
+				throw new Exception($which.' length must be an integer, greater than six.');
 			}
 		}
 	}
@@ -237,13 +275,30 @@ class regex_tester_match extends regex_tester
 {
 
 	/**
+	 * @function truncate() takes the a single array of strings (whole
+	 * match & sub patterns) generated preg_match_all() and truncates
+	 * each string in the array so they do not excede the maximum length
+	 * @param  [array] $input list of strings
+	 * @return [array] list of strings whose length does not excede
+	 *                 the maximum length
+	 */
+	private function truncate($input)
+	{
+		for( $a = 0 ; $a < count($input) ; $a += 1 )
+		{
+			$input[$a] = substr( $input[$a] , 0 , self::match_len );
+		}
+		return $input;
+	}
+
+	/**
 	 * @function process() applies regular expresion to sample string.
 	 * (In this case it actually does a preg_match_all() to the string
 	 *  before doing a preg_replace() on the string.)
 	 *
 	 * @param  [string] $sample sample content supplied by user
-	 * @return [array]	multi-dimensional associative array with all the
-	 *					matched patterns and subpatterns being returned
+	 * @return [array]  multi-dimensional associative array with all the
+	 *                  matched patterns and subpatterns being returned
 	 */
 	public function process($sample)
 	{
@@ -260,6 +315,7 @@ class regex_tester_match extends regex_tester
 		{
 			for( $a = 0 ; $a < count($matches) ; $a += 1 )
 			{
+				$matches = $this->truncate($matches[$a]);
 				$output['matches'][] = array( 'wholeMatch' => array_shift($matches[$a]) , 'subPatterns' => $matches[$a] );
 			}
 
@@ -499,7 +555,7 @@ class regex_tester_error extends regex_tester
 			}
 
 			$this->error_processed = true;
-			$this->preg_error = str_replace('preg_match() [function.preg-match]: ','',strip_tags($error))
+			$this->preg_error = str_replace('preg_match() [function.preg-match]: ','',strip_tags($error));
 			return $this->preg_error;
 		}
 		return $this->preg_error;
