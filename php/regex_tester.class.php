@@ -1,7 +1,6 @@
 <?php
 
 if( !class_exists('micro_time') ) { die('can\'t function without micro_time class'); }
-if( !class_exists('handle_php_errors') ) { die('can\'t function without handle_php_errors class'); }
 
 class regex_tester {
 	protected $error_message = '';
@@ -12,10 +11,17 @@ class regex_tester {
 	protected $regex = '';
 	protected $matched = false;
 
-	static protected $handle_errors = null;
 	static protected $delim_open = '`';
 	static protected $delim_close = '`';
 
+	/**
+	 * @private
+	 * @param [mixed] $id                supplied identifier for this regex
+	 * @param [string] $find             raw regular expression to be tested
+	 * @param [string] $modifiers        alpha characters
+	 * @param [string] [$replace = '']   replacement pattern
+	 * @param [array] [$errors = false]  list of errors for this regex.
+	 */
 	protected function __construct( $id , $find , $modifiers , $replace = '' , $errors = false )
 	{
 		$this->id = $id;
@@ -30,6 +36,70 @@ class regex_tester {
 		}
 	}
 
+	/**
+	 * @function get_errors() returns information about the errors
+	 * encounted before actually testing the supplied regular
+	 * expression.
+	 *
+	 * @return [array] associative array
+	 */
+	public function get_errors()
+	{
+		return array( 'regexID' => $this->id , 'message' => $this->error_message );
+	}
+
+	/**
+	 * @function process() applies regular expresion to sample string.
+	 * (In this case it actually doesn't do anything to the string.)
+	 * @param  [string] $sample sample content supplied by user
+	 * @return [array] 2D associative array
+	 */
+	public function process($sample)
+	{
+		return array( 'output' => array( 'regexID' => $this->id , 'ok' => false ) , 'sample' => $sample );
+	}
+
+	/**
+	 * @function has_error() test whether there was an error with the
+	 * supplied regex
+	 *
+	 * @param [void]
+	 * @return [boolean] always TRUE for this object
+	 */
+	public function has_errors()
+	{
+		if( $this->error_message !== '')
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @function something_matched() whether or not this regex matched
+	 *			 anything in any sample tested.
+	 * @return [boolean] TRUE if something was matched, FALSE otherwise
+	 */
+	public function something_matched()
+	{
+		return $this->matched;
+	}
+
+
+	/**
+	 * @function get_obj() factory function - returns the appropriate
+	 * type of regex_tester object based on whether the regex was
+	 * valid and whether the user wanted to match or replace sample.
+	 *
+	 * @param  [std_obj] $regex_pair		individual regex pair
+	 *										object from output of
+	 *										json_decode supplied in
+	 *										request
+	 * @param  [boolean] [$do_replace = false] whether or not user
+	 *										want to match or replace
+	 * @return [regex_tester] regex_tester_match, regex_tester_replace
+	 *										or regex_tester_error object
+	 */
 	public static function get_obj( $regex_pair, $do_replace = false )
 	{
 		if( self::$handle_errors === null )
@@ -97,7 +167,6 @@ class regex_tester {
 		}
 		else
 		{
-			debug('No there wasn\'t an error');
 			$error = false;
 		}
 
@@ -134,29 +203,12 @@ class regex_tester {
 		}
 	}
 
-	public function get_errors()
-	{
-		return array( 'regexID' => $this->id , 'message' => $this->error_message );
-	}
-
-	public function process($sample)
-	{
-	}
-
-	public function has_errors()
-	{
-		if( $this->error_message !== '')
-		{
-			return true;
-		}
-		return false;
-	}
-
-	public function something_matched()
-	{
-		return $this->matched;
-	}
-
+	/**
+	 * @function set_delim() tests and sets open and close delimiters
+	 * for regular expression.
+	 * @param [string] $open  single non-alpha-numeric, non-white-space character
+	 * @param [string] $close single non-alpha-numeric, non-white-space character
+	 */
 	static public function set_delim($open,$close)
 	{
 		$tmp = array('open','close');
@@ -183,6 +235,16 @@ class regex_tester {
 
 class regex_tester_match extends regex_tester
 {
+
+	/**
+	 * @function process() applies regular expresion to sample string.
+	 * (In this case it actually does a preg_match_all() to the string
+	 *  before doing a preg_replace() on the string.)
+	 *
+	 * @param  [string] $sample sample content supplied by user
+	 * @return [array]	multi-dimensional associative array with all the
+	 *					matched patterns and subpatterns being returned
+	 */
 	public function process($sample)
 	{
 		$micro = micro_time::get_obj();
@@ -193,7 +255,7 @@ class regex_tester_match extends regex_tester
 			,'matches' => array()
 			,'seconds' => 0
 		);
-		debug($sample, $this->regex, $this->replace);
+
 		if( preg_match_all( $this->regex , $sample , $matches , PREG_SET_ORDER) )
 		{
 			for( $a = 0 ; $a < count($matches) ; $a += 1 )
@@ -219,11 +281,17 @@ class regex_tester_match extends regex_tester
 
 class regex_tester_replace extends regex_tester
 {
+
+	/**
+	 * @function process() applies regular expresion to sample string.
+	 * (In this case it only does preg_replace() to the sample)
+	 * @param  [string] $sample sample content supplied by user
+	 * @return [array] associative array
+	 */
 	public function process($sample)
 	{
 		$sample = preg_replace($this->regex, $this->replace,$sample);
 		return array( 'output' => array() , 'sample' => $sample );
-
 	}
 }
 
@@ -237,8 +305,17 @@ class regex_tester_error extends regex_tester
 {
 	protected $ok = false;
 	protected $error_processed = false;
+	protected $preg_error = '';
 	protected $error_parts = array('good' => '', 'problem' => '', 'bad' => '');
 
+	/**
+	 * @private
+	 * @param [mixed] $id                supplied identifier for this regex
+	 * @param [string] $find             raw regular expression to be tested
+	 * @param [string] $modifiers        alpha characters
+	 * @param [string] [$replace = '']   replacement pattern
+	 * @param [array] [$errors = false]  list of errors for this regex.
+	 */
 	protected function __construct( $id , $find , $modifiers , $replace = '' , $errors = false )
 	{
 		$this->id = $id;
@@ -257,6 +334,13 @@ class regex_tester_error extends regex_tester
 		}
 	}
 
+	/**
+	 * @function get_errors() returns information about the errors
+	 * encounted when doing a preg_match() using the supplied regular
+	 * expression.
+	 *
+	 * @return [array] 2D associative array
+	 */
 	public function get_errors()
 	{
 		$message = array();
@@ -283,23 +367,45 @@ class regex_tester_error extends regex_tester
 		return $output;
 	}
 
+	/**
+	 * @function process() applies regular expresion to sample string.
+	 * (In this case it actually doesn't do anything to the string.)
+	 * @param  [string] $sample sample content supplied by user
+	 * @return [array] 2D associative array
+	 */
 	public function process($sample)
 	{
+		if( !is_string($sample) )
+		{
+			throw new Exception(get_class($this).'::process() expects only parameter to be a string. '.gettype($sample).' given.');
+		}
 		return array( 'output' => array( 'regexID' => $this->id , 'ok' => false ) , 'sample' => $sample );
 	}
 
+	/**
+	 * @function has_error() test whether there was an error with the
+	 * supplied regex
+	 *
+	 * @param [void]
+	 * @return [boolean] always TRUE for this object
+	 */
 	public function has_error()
 	{
 		return true;
 	}
 
-/**
- * @method errors() returns all error information generated by the
- * object, including input and preg errors
- *
- * @param void
- * @return array an array of strings with error messages.
- */
+	/**
+	 * @function errors() returns all error information generated by the
+	 * object, including input and preg errors
+	 *
+	 * parses the error message to extract more info from it and try
+	 * and break up the regular expression into good, problem and
+	 * error parts to help user identify where s/he went wrong.
+	 *
+	 * @param [string] $error ($php_errormsg) generated by preg_match()
+	 *
+	 * @return [string] cleaned up version of error messages.
+	 */
 	private function parse_errors($error)
 	{
 		if( $this->error_processed === false )
@@ -393,8 +499,9 @@ class regex_tester_error extends regex_tester
 			}
 
 			$this->error_processed = true;
-			return str_replace('preg_match() [function.preg-match]: ','',strip_tags($error));
+			$this->preg_error = str_replace('preg_match() [function.preg-match]: ','',strip_tags($error))
+			return $this->preg_error;
 		}
-		return $error;
+		return $this->preg_error;
 	}
 }
