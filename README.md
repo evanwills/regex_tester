@@ -27,7 +27,7 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 		},
 		{...}
 	],
-	'sample': [
+	'samples': [
 		[string],
 		...
 	],			// [array] list of strings
