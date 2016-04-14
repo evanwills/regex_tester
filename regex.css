@@ -449,6 +449,11 @@ pre.modifiers {
 pre.replace {
 	background-color: #eef;
 }
+#butt legend {
+    left: -1000em;
+    position: absolute;
+    top: -1000em;
+}
 
 @media (max-width: 52em) {
 	.frInputWrap {
