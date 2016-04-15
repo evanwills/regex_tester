@@ -469,7 +469,7 @@ $.RegexTest = function (varieties) {
 				'ok': true,
 				'matchResultLen': 300,
 				'regexPairs': [],
-				'sample': [],
+				'samples': [],
 				'sampResultLen': 300,
 				'trimOutput': false,
 				'url': false
@@ -492,7 +492,7 @@ $.RegexTest = function (varieties) {
 		jsonObj.delimClose = workingEngine.getDelimClose();
 		jsonObj.url = workingEngine.getURL();
 		jsonObj.trimOutput = state.trimSampleOutput;
-		jsonObj.sample = parsedSample;
+		jsonObj.samples = parsedSample;
 
 		if ($('.regexPair').length > 0) {
 			jsonObj.regexPairs = [];

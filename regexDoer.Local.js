@@ -234,13 +234,13 @@ console.log('allRegexes: ', allRegexes);
 		jsonObj.regexPairs = tmp.regexPairs;
 		output.regexErrors = tmp.regexErrors;
 
-        for (a = 0; a < jsonObj.sample.length; a += 1) {
+        for (a = 0; a < jsonObj.samples.length; a += 1) {
 			for (b = 0; b < jsonObj.regexPairs.length; b += 1) {
 				if (jsonObj.regexPairs[b].parsed.ok === true) {
-					jsonObj.sample[a] = jsonObj.sample[a].replace(jsonObj.regexPairs[b].find, jsonObj.regexPairs[b].replace);
+					jsonObj.samples[a] = jsonObj.samples[a].replace(jsonObj.regexPairs[b].find, jsonObj.regexPairs[b].replace);
 				}
 			}
-			output.samples.push(jsonObj.sample[a]);
+			output.samples.push(jsonObj.samples[a]);
 		}
 		return output;
 	};
