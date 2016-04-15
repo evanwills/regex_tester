@@ -22,7 +22,7 @@ class regex_tester_aggregator
 		$this->json = json_decode($json_str);
 		if( $this->json === null )
 		{
-			$this->errors[] ='JSON string must be a valid JSON format.';
+			$this->errors[] ='JSON string must be valid JSON format.';
 			return;
 		}
 
@@ -41,7 +41,7 @@ class regex_tester_aggregator
 				    !property_exists( $this->json->regexPairs[$a] , 'id') ||
 				    !property_exists( $this->json->regexPairs[$a] , 'find' ) ||
 				    !property_exists( $this->json->regexPairs[$a] , 'modifiers' ) ||
-				    !property_exists( $this->json->regexPairs[$a] , 'modifiers' ) )
+				    !property_exists( $this->json->regexPairs[$a] , 'replace' ) )
 				{
 					$this->errors[] = 'Each regex pair must be an object containing the following properties: "id", "find", "modifiers" & "replace". Regex pair '.$a.' did not meet this requirement.';
 					return;
