@@ -118,7 +118,7 @@ __NOTE__: If nothing was matched but there were no errors, 'matched' must be fal
 ```
 
 ## Roadmap
-1.	Get PHP API service up and running using the base code from [preg_tester](https://github.com/evanwills/preg_test).
+1.	~~Get PHP API service up and running using the base code from [preg_tester](https://github.com/evanwills/preg_test).~~
 3.	Add .Net API service
 3.	Add branches for:
 	*	vanilla javascript (i.e. no jQuery or any other framework)
