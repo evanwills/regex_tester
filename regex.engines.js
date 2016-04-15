@@ -58,7 +58,7 @@ $.RegexEngine = function (variety) {
 		format = 'xml';
 	}
 
-	if (variety.URL !== undefined && typeof variety.URL === 'string' && variety.URL.match(/^https?:\/\/(?:[a-z0-9_\-]+(?:\.[a-z0-9_\-]+)*\.[a-z]{2,3}(?:\.[a-z]{2})?|(?:[01]?[0-9]{1,2}|2([0-4][0-9]|5[0-4]))(?:\.(?:[01]?[0-9]{1,2}|2([0-4][0-9]|5[0-4]))){3})\/?\//)) {
+	if (variety.URL !== undefined && typeof variety.URL === 'string' && variety.URL.match(/^https?:\/\/(?:localhost|[a-z0-9_\-]+(?:\.[a-z0-9_\-]+)*\.[a-z]{2,3}(?:\.[a-z]{2})?|(?:[01]?[0-9]{1,2}|2([0-4][0-9]|5[0-4]))(?:\.(?:[01]?[0-9]{1,2}|2([0-4][0-9]|5[0-4]))){3})\/?\//)) {
 		url = variety.URL;
 	}
 
