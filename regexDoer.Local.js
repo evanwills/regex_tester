@@ -26,18 +26,18 @@ $.RegexDoerLocal = function (doXregexp) {
 			this.tryRegExp = function (regex, modifiers) {
 				var output;
 				try {
-					output = new XRegExp(regex, modifiers);
+					output = XRegExp(regex, modifiers);
 				} catch (e) {
 					console.warn(e);
 					throw {'message': e.message};
 				}
 				return output;
 			};
-			this.match = function (regexObj, samples) {
-
+			this.match = function (regexObj, sample) {
+				return XRegExp.exec(sample);
 			};
-			this.replace = function (regexObj, replacement, samples) {
-
+			this.replace = function (regexObj, replacement, sample) {
+				return XRegExp.replace(sample, regexObj, replacement);
 			};
 		};
 		mode = 'xRegExp';
@@ -53,11 +53,11 @@ $.RegexDoerLocal = function (doXregexp) {
 				}
 				return output;
 			};
-			this.match = function (regexObj, samples) {
-				return samples.match(regexObj);
+			this.match = function (regexObj, sample) {
+				return sample.match(regexObj);
 			};
-			this.replace = function (regexObj, replacement, samples) {
-				return samples.replace(regexObj, replacement);
+			this.replace = function (regexObj, replacement, sample) {
+				return sample.replace(regexObj, replacement);
 			};
 		};
 	}
@@ -77,29 +77,35 @@ $.RegexDoerLocal = function (doXregexp) {
 	 *						 dimension is each match and the second
 	 *						 dimension what was actually matched
 	 */
-    function processRegex(regexObj, sample) {
-        var a = 0,
-            tmpLen = 0,
-            tmpMatch,
-            output = {'matched': false, result: []},
+	function processRegex(regexObj, sample) {
+		var a = 0,
+			tmpLen = 0,
+			tmpMatch,
+			output = {'matched': false, result: []},
 			tmp,
 			tmpResult = {'wholeMatch': '', 'subPatterns': []};
 
-        if (regexObj.ok === true) {
-            tmpMatch = regexAdapter.match(regexObj.regexp, sample);
-            if (tmpMatch.length !== null) {
-                output.matched = true;
-                if (regexObj.isGlobal) {
-                    tmpLen = tmpMatch.length;
-                    for (a = 0; a < tmpLen; a += 1) {
+		if (regexObj.ok === true) {
+			tmpMatch = regexAdapter.match(regexObj.regexp, sample);
+			if (tmpMatch !== null && tmpMatch.length !== null) {
+				output.matched = true;
+				tmpLen = tmpMatch.length;
+				if (regexObj.isGlobal) {
+					for (a = 0; a < tmpLen; a += 1) {
 						tmp = tmpMatch[a].match(regexObj.regexp);
                         output.result.push({'wholeMatch': tmp.shift(), 'subPatterns': tmp});
                     }
                 } else {
-                    output.result.push({'wholeMatch': tmpMatch.shift(), 'subPatterns': tmpMatch});
-                }
-            }
-        }
+					tmp = [];
+					for (a = 0; a < tmpLen; a += 1) {
+						if (tmpMatch[a] !== undefined) {
+							tmp.push(tmpMatch[a]);
+						}
+					}
+					output.result.push({'wholeMatch': tmp.shift(), 'subPatterns': tmp});
+				}
+			}
+		}
         return output;
     }
 
@@ -160,6 +166,7 @@ $.RegexDoerLocal = function (doXregexp) {
 			throw {'message': '$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message};
 		}
 
+		console.log(regex);
 		try {
 			output.regexp = regexAdapter.tryRegExp(regex, modifiers);
 		} catch (e) {
@@ -175,7 +182,7 @@ $.RegexDoerLocal = function (doXregexp) {
 	function testAllRegexes(allRegexes, parent) {
 		var a = 0,
 			output = [];
-console.log('allRegexes: ', allRegexes);
+
 		for (a = 0; a < allRegexes.length; a += 1) {
             allRegexes[a].parsed = parent.validateRegex(allRegexes[a].find, allRegexes[a].modifiers);
 			if (allRegexes[a].parsed.ok === false) {
@@ -185,11 +192,11 @@ console.log('allRegexes: ', allRegexes);
 				});
 			}
         }
-		console.log({'regexPairs': allRegexes, 'regexErrors': output});
+
 		return {'regexPairs': allRegexes, 'regexErrors': output};
 	}
 
-	this.testRegex = function (jsonObj) {
+	this.testRegex = function (jsonObj, renderer) {
 		var a = 0,
 			b = 0,
             output = {
@@ -210,14 +217,14 @@ console.log('allRegexes: ', allRegexes);
 		jsonObj.regexPairs = tmp.regexPairs;
 		output.regexErrors = tmp.regexErrors;
 
-        for (a = 0; a < jsonObj.sample.length; a += 1) {
-			output.samples.push({'sampleID': a, 'sampleMatches': processSample(jsonObj.regexPairs, jsonObj.sample[a])});
+        for (a = 0; a < jsonObj.samples.length; a += 1) {
+			output.samples.push({'sampleID': a, 'sampleMatches': processSample(jsonObj.regexPairs, jsonObj.samples[a])});
 		}
-		return output;
+		renderer(output, jsonObj);
 	};
 
 
-	this.findReplace = function (jsonObj) {
+	this.findReplace = function (jsonObj, renderer) {
 		var a = 0,
 			b = 0,
             output = {
@@ -237,12 +244,12 @@ console.log('allRegexes: ', allRegexes);
         for (a = 0; a < jsonObj.samples.length; a += 1) {
 			for (b = 0; b < jsonObj.regexPairs.length; b += 1) {
 				if (jsonObj.regexPairs[b].parsed.ok === true) {
-					jsonObj.samples[a] = jsonObj.samples[a].replace(jsonObj.regexPairs[b].find, jsonObj.regexPairs[b].replace);
+					jsonObj.samples[a] = jsonObj.samples[a].replace(jsonObj.regexPairs[b].parsed.regexp, jsonObj.regexPairs[b].replace);
 				}
 			}
 			output.samples.push(jsonObj.samples[a]);
 		}
-		return output;
+		renderer(output, jsonObj);
 	};
 
 
