@@ -423,6 +423,10 @@ span.whole::after {
 	padding: 1em;
 	border: 0.1em dotted #ddd;
 }
+.regex-match-item.has-error {
+	background-color: #f00;
+	color: #ff0;
+}
 .match-match {
 	padding-left: 1.5em;
 }
@@ -454,6 +458,7 @@ pre.replace {
     position: absolute;
     top: -1000em;
 }
+.error-message { font-weight: bold; }
 
 @media (max-width: 52em) {
 	.frInputWrap {
