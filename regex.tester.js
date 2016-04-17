@@ -391,7 +391,6 @@ $.RegexTest = function (varieties) {
 			newEngine = newEngine.replace(/\{\{RegexEngineName\}\}/g, engineName);
 			$('#regex-engines').append(newEngine);
 		}
-		console.log(engines);
 	}
 
 
@@ -471,8 +470,7 @@ $.RegexTest = function (varieties) {
 				'regexPairs': [],
 				'samples': [],
 				'sampResultLen': 300,
-				'trimOutput': false,
-				'url': false
+				'trimOutput': false
 			},
 			sample = [];
 
@@ -490,7 +488,6 @@ $.RegexTest = function (varieties) {
 
 		jsonObj.delimOpen = workingEngine.getDelimOpen();
 		jsonObj.delimClose = workingEngine.getDelimClose();
-		jsonObj.url = workingEngine.getURL();
 		jsonObj.trimOutput = state.trimSampleOutput;
 		jsonObj.samples = parsedSample;
 
@@ -622,6 +619,7 @@ $.RegexTest = function (varieties) {
 
 	function renderRegexBlock(regex) {
 		var a = 0,
+			errorClass = '',
 			find = HTMLencode(regex.regex.find),
 			output = $('#match-regex').html(),
 			matches = '',
@@ -633,6 +631,7 @@ $.RegexTest = function (varieties) {
 			if (regex.regex.error.formatted !== undefined) {
 				find = regex.regex.error.formatted;
 			}
+			errorClass = ' has-error';
 		} else if (regex.matched === false) {
 			matches = '<p class="no-match">Nothing was matched</p>';
 		} else {
@@ -642,6 +641,7 @@ $.RegexTest = function (varieties) {
 			}
 			matches += '\n\t\t\t\t\t\t\t\t</ol>\n';
 		}
+		output = output.replace('{{ERROR_CLASS}}', errorClass);
 		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + HTMLencode(regex.regex.find) + '</code></pre>');
 		if (regex.regex.modifiers !== '') {
 			tmp = '<pre class="modifiers"><code>' + HTMLencode(regex.regex.modifiers) + '</code></pre>';
@@ -698,7 +698,7 @@ $.RegexTest = function (varieties) {
 		if (input.doReplace === false) {
 			$('#matches .wrapper').html('');
 			for (a = 0; a < input.samples.length; a += 1) {
-				$('#matches .wrapper').append(renderSampleBlock(jsonObj.sample[input.samples[a].sampleID], input.samples[a].sampleMatches));
+				$('#matches .wrapper').append(renderSampleBlock(jsonObj.samples[input.samples[a].sampleID], input.samples[a].sampleMatches));
 			}
 
 			if ($('#matches-tab-btn').hasClass('hide')) {
@@ -753,12 +753,10 @@ $.RegexTest = function (varieties) {
 		} else {
 			if (replace === true) {
 				console.log('regex find & replace');
-				returnObj = regexDoer.findReplace(jsonObject);
-				renderReturn(returnObj, jsonObject);
+				regexDoer.findReplace(jsonObject, renderReturn);
 			} else {
 				console.log('test regex');
-				returnObj = regexDoer.testRegex(jsonObject);
-				renderReturn(returnObj, jsonObject);
+				regexDoer.testRegex(jsonObject, renderReturn);
 			}
 		}
 	}
@@ -869,9 +867,7 @@ $.RegexTest = function (varieties) {
 
 		for (a = 0; a < engines.length; a += 1) {
 			if (engines[a].getName() === $(this).val()) {
-				console.log(this);
 				workingEngine = engines[a];
-
 				$('.modifiers').each(setPattern);
 
 				if (workingEngine.delimIsValid(regexDelim) !== true) {
@@ -883,19 +879,14 @@ $.RegexTest = function (varieties) {
 		if (workingEngine.getURL() === false) {
 
 			if (workingEngine.getName() === 'Vanilla JS') {
-				console.log('using $.RegexDoerLocal (Vanilla JS mode)');
-				console.log($.RegexDoerLocal);
 				regexDoer = new $.RegexDoerLocal(false);
 			} else {
-				console.log('using $.RegexDoerLocal (XRegex mode)');
 				regexDoer = new $.RegexDoerLocal(true);
 			}
 		} else {
 			if (workingEngine.getFormat() === 'xml') {
-				console.log('using $.RegexDoerXmlAjax');
 				regexDoer = new $.RegexDoerXmlAjax();
 			} else {
-				console.log('using $.RegexDoerJsonAjax');
 				regexDoer = new $.RegexDoerJsonAjax();
 			}
 		}
