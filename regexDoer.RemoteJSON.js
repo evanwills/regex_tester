@@ -17,27 +17,63 @@ $.RegexDoerJsonAjax = function () {
 	"use strict";
 
 	var engine,
-		output;
+		output,
+		renderFunc,
+		jsonObject;
 
 
+	function onError(data) {
+		console.log('inside onError()');
+		console.log('onError(data) = ', data);
+		console.log('jsonObject = ', jsonObject);
+		console.log('renderFunc = ', renderFunc);
+		alert('Something went wrong. Check out the console message.');
+	}
 
-	this.findReplace = function (input) {
+	function onSuccess(data) {
+		console.log('inside onSuccess()');
+		console.log('onSuccess(data) = ', data);
+		console.log('jsonObject = ', jsonObject);
+		console.log('renderFunc = ', renderFunc);
+	}
+
+
+	this.findReplace = function (jsonObj, renderer) {
 		var AJAXurl = '';
 
-		AJAXurl = '?json=' + output.toJson() + '&jquery=true&callback=?';
+		jsonObject = jsonObj;
+		renderFunc = renderer;
+
+		AJAXurl = '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
+		console.log(AJAXurl);
 
 		$('#loadingText').html('Loading. Please wait...');
 
 		$.ajax({
 			'url': AJAXurl,
 			'dataType': engine.getURL(),
-			'error': on_error,
-			'success': on_success
+			'error': onError,
+			'success': onSuccess
 		});
 	};
 
-	this.testRegex = function (input) {
-		var jsonObj = input.toJson();
+	this.testRegex = function (jsonObj, renderer) {
+		var AJAXurl = '';
+
+		jsonObject = jsonObj;
+		renderFunc = renderer;
+
+		AJAXurl = '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
+		console.log(AJAXurl);
+
+		$('#loadingText').html('Loading. Please wait...');
+
+		$.ajax({
+			'url': AJAXurl,
+			'dataType': engine.getURL(),
+			'error': onError,
+			'success': onSuccess
+		});
 	};
 
 	this.validateRegex = function (regex, modifiers, delim) {};
@@ -53,7 +89,7 @@ $.RegexDoerJsonAjax = function () {
 
 	this.setOutput = function (jsonObj) {
 		output = jsonObj;
-	}
+	};
 
 	this.validateDelim = function (input) {
 		return engine.validateDelim(input);
