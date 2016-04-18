@@ -26,7 +26,7 @@ if (typeof window.console !== 'object') {
  *			'validDelimList': [string] (optional) white-list of valid
  *					regexp delimiters
  */
-$.RegexEngine = function (variety) {
+function RegexEngine(variety) {
 	'use strict';
 	var name = '',
 		modifiers = '',
@@ -218,5 +218,5 @@ $.RegexEngine = function (variety) {
 	}
 	defaultDelimOpen = delimOpen;
 	defaultDelimClose = delimClose;
-};
+}
 
