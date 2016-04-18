@@ -557,7 +557,7 @@ $.RegexTest = function (varieties) {
 			if (regexes[regexID] === undefined || regexes[regexID].id !== regexID) {
 				for (b = 0; b < regexes.length; b += 1) {
 					if (regexes[b].id === regexID) {
-						regexID = regexes[b].id
+						regexID = regexes[b].id;
 					}
 				}
 			}
@@ -833,14 +833,14 @@ $.RegexTest = function (varieties) {
 	// START: doing object initialisation stuff.
 
 	engines.push(
-		new $.RegexEngine({
+		new RegexEngine({
 			'name': 'Vanilla JS',
 			'modifiers': 'gimuy',
 			'URL': false,
 			'format': 'json', // json | xml
 			'delim': '/'
 		}),
-		new $.RegexEngine({
+		new RegexEngine({
 			'name': 'xRegExp JS',
 			'modifiers': 'gimuynsxA',
 			'URL': false,
