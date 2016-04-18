@@ -78,20 +78,19 @@ $.RegexDoerJsonAjax = function () {
 
 	this.validateRegex = function (regex, modifiers, delim) {};
 
-	this.setEngine = function (input, delim) {
-		engine = input;
-		try {
-			engine.validateDelim(delim);
-		} catch (e) {
-			console.log(e);
+	this.setEngine = function (regexEngineObj) {
+		if( regexEngineObj instanceof RegexEngine !== true )
+		{
+			throw {'message': 'RegexDoerLocal::setEngine() expects only parameter regexEngineObj to be an instance of RegexEngine'};
 		}
-	};
-
-	this.setOutput = function (jsonObj) {
-		output = jsonObj;
+		engine = regexEngineObj;
 	};
 
 	this.validateDelim = function (input) {
 		return engine.validateDelim(input);
+	};
+
+	this.validateModifiers = function (modifiers) {
+
 	};
 };

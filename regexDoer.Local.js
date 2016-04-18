@@ -223,7 +223,6 @@ $.RegexDoerLocal = function (doXregexp) {
 		renderer(output, jsonObj);
 	};
 
-
 	this.findReplace = function (jsonObj, renderer) {
 		var a = 0,
 			b = 0,
@@ -252,11 +251,19 @@ $.RegexDoerLocal = function (doXregexp) {
 		renderer(output, jsonObj);
 	};
 
-
 	this.setEngine = function (regexEngineObj) {
+		if( regexEngineObj instanceof RegexEngine !== true )
+		{
+			throw {'message': 'RegexDoerLocal::setEngine() expects only parameter regexEngineObj to be an instance of RegexEngine'};
+		}
 		engine = regexEngineObj;
 	};
+
 	this.validateDelim = function (input) {
 		return engine.validateDelim(input);
+	};
+
+	this.validateModifiers = function (modifiers) {
+
 	};
 };
