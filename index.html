@@ -18,68 +18,17 @@
 				<li id="regex-tab-btn" class="active"><a href="#regexes" data-toggle="tab">Regex</a></li>
 				<li id="matches-tab-btn" class="hide"><a href="#matches" data-toggle="tab">Matches</a></li>
 				<li id="output-tab-btn" class="hide"><a href="#output" data-toggle="tab">Output</a></li>
-
-				<li><a href="#settings" data-toggle="tab">Settings</a></li>
 			</ul>
 
 			<div class="tab-content">
 				<fieldset id="input" class="tab-pane fade">
 					<legend>Sample</legend>
 					<textarea id="sample" name="sample" class="form-control" data-hasChanged="false"></textarea>
-
-					<h2>Sample settings</h2>
-
-					<!-- <h3>Clean white space options</h3> -->
-					<ul class="inline">
-						<li>
-							<label>
-								<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
-								Trim white space from sample
-							</label>
-						</li>
-						<li>
-							<label class="disabled">
-								<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20"  disabled="disabled"/>
-								<span>Trim white space from sample</span> before processing
-							</label>
-							or
-						</li>
-						<li>
-							<label class="disabled">
-								<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21"  checked="checked" disabled="disabled"/>
-								<span>Trim white space from sample</span> after processing
-							</label>
-						</li>
-					</ul>
-
-					<!-- <h3>Split sample</h3> -->
-					<ul class="inline">
-						<li>
-							<label>
-								<input type="checkbox" name="split_sample" id="split_sample" value="true" tabindex="22" />
-								Split the sample into pieces
-							</label>
-						</li>
-						<li class="disabled">
-							<label for="split_delim">
-								Character to split the sample with
-							</label>
-							<input type="text" name="split_delim" id="split_delim" value="\n" maxlength="2" size="1" tabindex="23"  disabled="disabled"/>
-						</li>
-					</ul>
-
 				</fieldset>
 
 
 				<fieldset id="regexes" class="tab-pane fade in active in">
 					<legend>Regular Expressions</legend>
-					<fieldset id="regexEngines">
-						<legend>Choose your Regular expression engine</legend>
-						<ul id="regex-engines" class="list-inline">
-							<li><label><input type="radio" name="regex_engine" id="regexVanillaJS" value="Vanilla JS" class="engine-radio" checked="checked" /> Vanilla JS </label></li>
-							<li><label><input type="radio" name="regex_engine" id="regexxRegExpJS" value="xRegExp JS" class="engine-radio" /> xRegExp JS </label></li>
-						</ul>
-					</fieldset>
 					<p class="note"><strong>Note:</strong> <span class="warning">Do not</span> use opening and closing delimiters. If regexes are sent to the server, back ticks (`) will automatically inserted as opening and closing delimiters.</p>
 					<ol id="regexes-pairs" class="regexes">
 {{regexPair}}
@@ -100,64 +49,138 @@
 
 					<textarea id="outputContent" name="outputContent" readonly="readonly"></textarea>
 				</fieldset>
+			</div>
+
+			<div class="modal fade" id="settings" tabindex="-1" role="dialog" aria-labelledby="settingsLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+							<h2 class="modal-title" id="settingsLabel">General Settings</h4>
+						</div>
+						<div class="modal-body">
+
+							<fieldset id="regexEngines">
+								<legend class="h3">Regular Expression settings</legend>
+
+								<fieldset id="regexEngines">
+									<legend class="h4">Choose your Regular expression engine</legend>
+									<ul id="regex-engines" class="list-inline">
+										<li><label><input type="radio" name="regex_engine" id="regexVanillaJS" value="Vanilla JS" class="engine-radio" checked="checked" /> Vanilla JS </label></li>
+										<li><label><input type="radio" name="regex_engine" id="regexxRegExpJS" value="xRegExp JS" class="engine-radio" /> xRegExp JS </label></li>
+									</ul>
+								</fieldset>
+
+								<fieldset id="regexEngines">
+									<legend class="h4">Regular Expression delimiters</legend>
+									<div id="regex-delimiter">
+										<p>Some regex engines (like PHP) require delimiters to identify the start and end of the regex.</p>
+										<ul class="list-unstyled">
+											<li>
+												<label for="regex_delim">Delimiter:</label>
+												<input type="text" name="regex_delim" id="regex_delim" value="`" pattern="^[^0-9a-z\s\\]$" maxlength="1" size="1" />
+												<p><strong>NOTE:</strong> If the delimiter is a bracket/brace the delimiters will automatically be paired so the opening delimiter is the opening bracket/brace and the closing delimiter is it's closing equivalent.</p>
+											</li>
+										</ul>
+									</div>
+								</fieldset>
+							</fieldset>
 
 
+							<fieldset id="sampleSettings">
+								<legend class="h3">Sample settings</legend>
 
+								<!-- <h3>Clean white space options</h3> -->
+								<ul class="inline">
+									<li>
+										<label>
+											<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
+											Trim white space from sample
+										</label>
+									</li>
+									<li>
+										<label class="disabled">
+											<input type="radio" name="ws_action" id="ws_trim_pos_before" value="true" tabindex="20"  disabled="disabled"/>
+											<span>Trim white space from sample</span> before processing
+										</label>
+										or
+									</li>
+									<li>
+										<label class="disabled">
+											<input type="radio" name="ws_action" id="ws_trim_pos_after" value="false" checked="checked" tabindex="21"  checked="checked" disabled="disabled"/>
+											<span>Trim white space from sample</span> after processing
+										</label>
+									</li>
+								</ul>
 
-				<fieldset id="settings" class="tab-pane fade">
-					<legend>General Settings</legend>
+								<!-- <h3>Split sample</h3> -->
+								<ul class="inline">
+									<li>
+										<label>
+											<input type="checkbox" name="split_sample" id="split_sample" value="true" tabindex="22" />
+											Split the sample into pieces
+										</label>
+									</li>
+									<li class="disabled">
+										<label for="split_delim">
+											Character to split the sample with
+										</label>
+										<input type="text" name="split_delim" id="split_delim" value="\n" maxlength="2" size="1" tabindex="23"  disabled="disabled"/>
+									</li>
+								</ul>
+							</fieldset>
 
-					<h2>Rendering matched patterns</h2>
+							<fieldset id="renderMatchPatterns">
+								<legend class="h3">Rendering matched patterns</legend>
 
-					<div id="truncate-long-strings">
-						<h3 class="h4">Truncate long strings</h3>
-						<p>When viewing results, it's often convenient (and faster) to truncate the sample or matched strings.</p>
+								<fieldset id="renderMatchPatterns">
+									<legend class="h4">Truncate long strings</legend>
 
-						<ul class="list-unstyled">
-							<li>
-								<label for="sample_len">Maximum length of sample in results:</label>
-								<input type="number" name="sample_len" id="sample_len" value="300" min="6" step="1" pattern="^[0-9]+$" size="4" />
-							</li>
-							<li>
-								<label for="matched_len">Maximum length of a matched part in results:</label>
-								<input type="number" name="matched_len" id="matched_len" value="300" min="6" step="1" pattern="^[0-9]+$" size="1" />
-							</li>
-						</ul>
+									<div id="truncate-long-strings">
+										<p>When viewing results, it's often convenient (and faster) to truncate the sample or matched strings.</p>
+
+										<ul class="list-unstyled">
+											<li>
+												<label for="sample_len">Maximum length of sample in results:</label>
+												<input type="number" name="sample_len" id="sample_len" value="300" min="6" step="1" pattern="^[0-9]+$" size="4" />
+											</li>
+											<li>
+												<label for="matched_len">Maximum length of a matched part in results:</label>
+												<input type="number" name="matched_len" id="matched_len" value="300" min="6" step="1" pattern="^[0-9]+$" size="1" />
+											</li>
+										</ul>
+									</div>
+								</fieldset>
+
+								<fieldset id="renderWhiteSpace">
+									<legend class="h4">White space characters</legend>
+
+									<div id="rendering-white-space-chars">
+										<p>When rendering samples and matches</p>
+
+										<ul class="list-unstyled">
+											<li>
+												<label for="render_ws_hide">
+													<input type="radio" name="render_ws" id="render_ws_hide" value="0" checked="checked" />
+													Do not show white space characters:
+												</label>
+											</li>
+											<li>
+												<label for="render_ws_show">
+													<input type="radio" name="render_ws" id="render_ws_show" value="1" />
+													Show white space characters in samples and matches:
+												</label>
+											</li>
+										</ul>
+									</div>
+								</fieldset>
+							</fieldset>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
 					</div>
-
-					<div id="rendering-white-space-chars">
-						<h3 class="h4">White space characters</h3>
-						<p>When rendering samples and matches</p>
-
-						<ul class="list-unstyled">
-							<li>
-								<label for="render_ws_hide">
-									<input type="radio" name="render_ws" id="render_ws_hide" value="0" checked="checked" />
-									Do not show white space characters:
-								</label>
-							</li>
-							<li>
-								<label for="render_ws_show">
-									<input type="radio" name="render_ws" id="render_ws_show" value="1" />
-									Show white space characters in samples and matches:
-								</label>
-							</li>
-						</ul>
-					</div>
-
-
-					<div id="regex-delimiter">
-						<h2>Regular Expression delimiters</h2>
-						<p>Some regex engines (like PHP) require delimiters to identify the start and end of the regex.</p>
-						<ul class="list-unstyled">
-							<li>
-								<label for="regex_delim">Delimiter:</label>
-								<input type="text" name="regex_delim" id="regex_delim" value="`" pattern="^[^0-9a-z\s\\]$" maxlength="1" size="1" />
-								<p><strong>NOTE:</strong> If the delimiter is a bracket/brace the delimiters will automatically be paired so the opening delimiter is the opening bracket/brace and the closing delimiter is it's closing equivalent.</p>
-							</li>
-						</ul>
-					</div>
-				</fieldset>
+				</div>
 			</div>
 
 			<fieldset id="butt">
@@ -168,6 +191,9 @@
 					--><label for="replace">Use the regular expressions to do a find and replace</label><!--
 					--><input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change b-right" />
 				</p>
+				<button type="button" id="settingsBtn" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#settings">
+					<spna class="sr-only">Settings</spna> <span class="glyphicon glyphicon-cog"></span>
+				</button>
 			</fieldset>
 		</form>
 

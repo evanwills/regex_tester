@@ -361,7 +361,6 @@ span.whole::after {
 
 #regexEngines legend {
     border-bottom: medium none;
-    font-size: 120%;
     margin-bottom: 0.1em;
 }
 #regexEngines li * {
@@ -390,6 +389,7 @@ span.whole::after {
     border-bottom-right-radius: 1.5em;
     border-top-right-radius: 1.5em;
 }
+#settingsBtn { border-radius: 50%; }
 .regex-error {
 //    background-color: #fcc;
     padding-top: 1.7em;
@@ -502,6 +502,11 @@ pre.replace {
 	a[rel="sidebar"] {
 		display: none;
 	}
+	#settingsBtn {
+		position: absolute;
+		right: 0.4em;
+		bottom: 0.5em;
+	}
 }
 @media (max-width: 19em) {
 	.frInputWrap .hiding {
@@ -509,5 +514,8 @@ pre.replace {
 	}
 	.frInputWrap input, .frInputWrap textarea {
 		display: block;
+	}
+	#settingsBtn {
+		position: static !important;
 	}
 }
