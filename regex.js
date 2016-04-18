@@ -16,7 +16,7 @@ $(document).ready(function () {
 		regexVarieties = [],
 		php;
 
-	regexVarieties.push(new $.RegexEngine({
+	regexVarieties.push(new RegexEngine({
 		'name': 'PHP PCRE',
 		'modifiers': 'imsxeADSXUJu',
 		'URL': 'http://localhost/regex_tester/PHP/regex_tester.json.api.php',
