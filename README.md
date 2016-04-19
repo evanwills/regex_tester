@@ -16,22 +16,22 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 {
 	'delimClose': '',		// [string] single char
 	'delimOpen': '',		// [string] single char
-	'doReplace': false,		// [boolean]
-	'matchResultLen': 300,	// [int] > 6
-	'regexPairs': [			// [array] list of regexPair objects:
+	'doReplace': false,		// [boolean] [required]
+	'matchResultLen': 300,	// [integer] > 6
+	'regexPairs': [			// [array] [required] list of regexPair objects:
 		{
-			'id': 0,		// [int]	ID of the regex to be matched
-			'find': '',		// [string]	regex pattern to be tested/used
-			'replace': '',	// [string]	replacement pattern
-			'modifiers': '' // [string]	alpha character
+			'id': 0,		// [integer] [required]	ID of the regex to be matched
+			'find': '',		// [string] [required]	regex pattern to be tested/used
+			'replace': '',	// [string] [required]	replacement pattern
+			'modifiers': '' // [string] [required]	alpha character
 		},
 		{...}
 	],
-	'samples': [
+	'samples': [	 // [array][required]
 		[string],
 		...
 	],			// [array] list of strings
-	'sampResultLen': 300,	// [int] > 6
+	'sampResultLen': 300,	// [integer] > 6
 	'trimOutput': false,	// [boolean]
 }
 ```
@@ -40,32 +40,33 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 #### when doReplace is FALSE:
 ``` javascript
 {
-	'matched': true,		// [boolean] whether or not anything at all was matched
-	'message': '',			// [string] general error messages if any (e.g. "server error", "page not found")
+	'matched': true,		// [boolean] [required] whether or not anything at all was matched
+	'message': [],			// [array] [required] list of general (recoverable) error messages if any.
 	'regexErrors': [
 		{
-			'regexID': 0,		// [int] [required] ID of the regex that had a problem
+			'regexID': 0,		// [integer] [required] ID of the regex that had a problem
 			'message': '',		// [string] [required]
-			'patternParts': {		// optional (if supported)
-				'good': '',			// [string] good part of the regex
-				'problem': '',		// [string] problem part of the regex
-				'bad': ''			// [string] bad part of the regex
+			'patternParts': {	// [object] [optional] (if supported)
+				'good': '',			// [string] [required] good part of the regex
+				'problem': '',		// [string] [required] problem part of the regex
+				'bad': ''			// [string] [required] bad part of the regex
 			}
 		},
 		{...}
 	],
 	'samples': [
 		{
-			'sampleID': 0			// [int] ID of the sample that was matched
+			'sampleID': 0			// [integer] [required] ID of the sample that was matched
 			'sampeMatches': [		// [array] list of sampleMatch objects
+										// When regex was OK and matched something in the sample
 				{
-					'regexID': 0,		// [int] ID of the regex that was matched
-					'ok': true,			// [bool] was the regex OK (true if there were no errors)
-					'matched': true		// [bool] true if the regex matched anything at all
-					'matches': [		// [array] list of matches
+					'regexID': 0,		// [integer] [required] ID of the regex that was matched
+					'ok': true,			// [boolean] [required] was the regex OK (true if there were no errors)
+					'matched': true,	// [boolean] [required] (if regex is ok) true if the regex matched anything at all
+					'matches': [		// [array] [required] (if regex is ok) list of matches
 						{
-							'wholeMatch': '',	// [string] list of the whole match
-							'subPatterns': [	// [array] list of sub-parts of the match
+							'wholeMatch': '',	// [string] [required] list of the whole match
+							'subPatterns': [	// [array] [required] list of sub-parts of the match (if any)
 								[string],
 								...
 							]
@@ -73,17 +74,26 @@ Currently the only regex engine implemented is the vanilla JavaScript Engine. Bu
 						{...}
 
 					],
-					'seconds': 0.002	// [float] how many seconds it took to apply the regex to the sample
+					'seconds': 0.002	// [float] [optional] how many seconds it took to apply the regex to the sample
 				},
-				{ // regex has errors
-					'regexID': 0,		// [int] ID of the regex that was matched
-					'ok': false,		// [bool] was the regex OK (true if there were no errors)
+										// When regex is OK but didn't match anything in the sample
+				{
+					'regexID': 0,		// [integer] [required] ID of the regex that was matched
+					'ok': true,			// [boolean] [required] was the regex OK (true if there were no errors)
+					'matched': false,	// [boolean] [required] (if regex is ok) true if the regex matched anything at all
+					'matches': []		// [array] [required] (if regex is ok) empty list
+					'seconds': 0.002	// [float] [optional] how many seconds it took to apply the regex to the sample
+				},
+										// When regex had problem
+				{						// regex has errors
+					'regexID': 0,		// [integer] [required] ID of the regex that was matched
+					'ok': false,		// [boolean] [required] was the regex OK (true if there were no errors)
 				},
 				{...}				// sampleMatch objects
 			]
 		}
 	],
-	'success': true,	// [boolean] whether or not there were any problems
+	'success': true,	// [boolean] [required] whether or not there were any problems
 }
 ```
 
@@ -95,25 +105,64 @@ __NOTE__: If nothing was matched but there were no errors, 'matched' must be fal
 
 ``` javascript
 {
-	'matched': false,	// [boolean] whether or not anything at all was matched
-	'message': '',		// [string] general error messages if any.
+	'matched': true,	// [boolean] [required] whether or not anything at all was matched
+	'message': [],		// [array] [required] list of general (recoverable) error messages if any.
 	'regexErrors': [
 		{
-			'regexID': 0,		// [int] [required] ID of the regex that had a problem
+			'regexID': 0,		// [integer] [required] ID of the regex that had a problem
 			'message': '',		// [string] [required]
-			'patternParts': {	// optional (if supported)
-				'good': '',		// [string] good part of the regex
-				'problem': '',	// [string] problem part of the regex
-				'bad': ''		// [string] bad part of the regex
+			'patternParts': {	// [object] [optional] (if supported)
+				'good': '',			// [string] [required] good part of the regex
+				'problem': '',		// [string] [required] problem part of the regex
+				'bad': ''			// [string] [required] bad part of the regex
 			}
 		},
 		{...}
 	],
-	'samples': [
-		[string],
+	'samples': []	// [array] [required] list of modified sample strings (in the same order as they were received.)
+		[string],	// [string] [optional]
 		...
 	],
-	'success': true,	// [boolean]
+	'success': true	// [boolean] [required] TRUE if there were no unrecoverable errors (see below for more about errors)
+}
+```
+#### when doReplace is True but nothing was matched:
+``` javascript
+{
+	'matched': false,	// [boolean] [required] whether or not anything at all was matched
+	'message': [],		// [array] [required] list of general (recoverable) error messages if any.
+	'regexErrors': [
+		{
+			'regexID': 0,		// [integer] [required] ID of the regex that had a problem
+			'message': '',		// [string] [required]
+			'patternParts': {	// [object] [optional] (if supported)
+				'good': '',			// [string] [required] good part of the regex
+				'problem': '',		// [string] [required] problem part of the regex
+				'bad': ''			// [string] [required] bad part of the regex
+			}
+		},
+		{...}
+	],
+	'samples': [],		// [array] [required] must be an empty array - if nothing was matched then nothing changed. Don't send them something they already have.
+	'success': true		// [boolean] [required]
+}
+```
+
+#### When there is an unrecoverable error with the request or JSON object supplied:
+``` javascript
+{
+	'success': false,
+	'message': ''		// [string] [required] general error messages if any.
+}
+```
+#### When there is a recoverable error with the request or JSON object supplied:
+``` javascript
+{
+	'success': success,
+	'message': [],		// [array] [required] list of general (recoverable) error messages (if any).
+	'regexErrors': []	// [array] [required] list of regexError ojbects (if any)
+	'samples': [],		// [array] [required] list of samples - see [when doReplace is FALSE](https://github.com/evanwills/regex_tester#when-doreplace-is-false) & [when doReplace is TRUE](https://github.com/evanwills/regex_tester#when-doreplace-is-true) above
+	'matched': false
 }
 ```
 
