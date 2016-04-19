@@ -362,6 +362,7 @@ span.whole::after {
 #regexEngines legend {
     border-bottom: medium none;
     margin-bottom: 0.1em;
+	margin-top: 0%;
 }
 #regexEngines li * {
 	font-size: 80%;
