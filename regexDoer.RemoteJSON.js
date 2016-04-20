@@ -23,19 +23,12 @@ $.RegexDoerJsonAjax = function () {
 
 
 	function onError(data) {
-		console.log('inside onError()');
-		console.log('onError(data) = ', data);
-		console.log('JSON.parse(data.responseText) = ', JSON.parse(data.responseText));
-		console.log('jsonObject = ', jsonObject);
-		console.log('renderFunc = ', renderFunc);
+//		console.log('inside onError()');
+//		console.log('JSON.parse(data.responseText) = ', JSON.parse(data.responseText));
 		alert('Something went wrong. Check out the console message.');
 	}
 
 	function onSuccess(data) {
-		console.log('inside onSuccess()');
-		console.log('onSuccess(data) = ', data);
-		console.log('jsonObject = ', jsonObject);
-		console.log('renderFunc = ', renderFunc);
 		renderFunc(data, jsonObject);
 	}
 
@@ -45,8 +38,6 @@ $.RegexDoerJsonAjax = function () {
 		jsonObject = jsonObj;
 
 		AJAXurl = engine.getURL() + '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
-		console.log('AJAXurl = ', AJAXurl);
-		console.log('JSON.stringify(jsonObj) = ', JSON.stringify(jsonObj));
 
 		return {
 			'url': AJAXurl,
