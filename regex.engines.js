@@ -28,18 +28,19 @@ if (typeof window.console !== 'object') {
  */
 function RegexEngine(variety) {
 	'use strict';
-	var name = '',
-		modifiers = '',
-		format = 'json',
-		url = false,
-		delimOpen = '`',
+	var defaultDelimClose = '`',
 		defaultDelimOpen = '`',
 		delimClose = '`',
-		defaultDelimClose = '`',
 		delimOK = true,
+		delimOpen = '`',
 		delimRegex = new RegExp('[^\w0-9\s]$'),
+		format = 'json',
 		modifierRegex,
+		modifiers = '',
+		name = '',
+		placeholder = 'ig',
 		tmp,
+		url = false,
 		validDelimiters = '';
 
 	if (variety.name !== undefined) {
@@ -51,7 +52,14 @@ function RegexEngine(variety) {
 	if (variety.modifiers !== undefined && variety.modifiers.match(/^[a-z]+$/i)) {
 		modifiers = variety.modifiers;
 	} else {
+		console.log('variety.modifiers = ', variety.modifiers);
+		console.log('variety.modifiers !== undefined = ', variety.modifiers !== undefined);
+		console.log('variety.modifiers.match(/^[a-z]+$/i) = ', variety.modifiers.match(/^[a-z]+$/i));
 		throw { message: 'Supplied modifiers are invalid. modifiers = "' + variety.modifiers + '"', object: 'RegexEngine', line: 37, method: 'constructor' };
+	}
+
+	if (variety.placeholder !== undefined && typeof variety.placeholder === 'string' ) {
+		placeholder = variety.placeholder;
 	}
 
 	if (variety.format.toLowerCase === 'xml') {
@@ -94,6 +102,14 @@ function RegexEngine(variety) {
 	 */
 	this.getModifiers = function () {
 		return modifiers;
+	};
+
+	/**
+	 * @method getPlaceholder() returns the placeholder string
+	 *			for the modifiers for the regex engine
+	 */
+	this.getPlaceholder = function () {
+		return placeholder;
 	};
 
 	/**

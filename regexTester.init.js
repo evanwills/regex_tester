@@ -19,6 +19,7 @@ $(document).ready(function () {
 	regexVarieties.push(new RegexEngine({
 		'name': 'PHP PCRE',
 		'modifiers': 'imsxeADSXUJu',
+		'placeholder': 'is',
 		'URL': 'http://localhost/regex_tester/PHP/regex_tester.json.api.php',
 		'format': 'json', // json | xml
 		'delim': '`'

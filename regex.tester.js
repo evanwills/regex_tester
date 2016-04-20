@@ -61,7 +61,7 @@ $.RegexTest = function (varieties) {
 	}
 
 
-	function HTMLencode(input) {
+	function htmlEncode(input) {
 		var el = document.createElement("div");
 		el.innerText = el.textContent = input;
 		return el.innerHTML;
@@ -75,6 +75,7 @@ $.RegexTest = function (varieties) {
 					find = [],
 					replace = [];
 
+				console.log('input = ', input);
 				if (typeof input !== 'string') {
 					console.warn('renderWS() expects first input to be a string. ' + typeof input + 'given.');
 					throw { message: 'renderWS() expects first input to be a string. ' + typeof input + 'given.'};
@@ -92,7 +93,7 @@ $.RegexTest = function (varieties) {
 				replace.push('[[[tab]]]\t');
 
 				for (a = 0; a < find.length; a += 1) {
-					input = HTMLencode(input.replace(find[a], replace[a]));
+					input = htmlEncode(input.replace(find[a], replace[a]));
 				}
 				return input.replace(/\[\[(\[(?:space|new line|return|line feed|tab)\])\]\]/g, '<span class="spc">$1</span>');
 			};
@@ -566,13 +567,13 @@ $.RegexTest = function (varieties) {
 			if (regexErrors[a].patternParts !== undefined) {
 				regexErrors[a].formatted = '';
 				if (regexErrors[a].patternParts.good !== undefined && regexErrors[a].patternParts.good !== '') {
-					regexErrors[a].formatted += '<span class="regex-part-good">' + HTMLencode(regexErrors[a].patternParts.good) + '</span>';
+					regexErrors[a].formatted += '<span class="regex-part-good">' + htmlEncode(regexErrors[a].patternParts.good) + '</span>';
 				}
 				if (regexErrors[a].patternParts.problem !== undefined && regexErrors[a].patternParts.problem !== '') {
-					regexErrors[a].formatted += '<span class="regex-part-problem">' + HTMLencode(regexErrors[a].patternParts.problem) + '</span>';
+					regexErrors[a].formatted += '<span class="regex-part-problem">' + htmlEncode(regexErrors[a].patternParts.problem) + '</span>';
 				}
 				if (regexErrors[a].patternParts.bad !== undefined && regexErrors[a].patternParts.bad !== '') {
-					regexErrors[a].formatted += '<span class="regex-part-bad">' + HTMLencode(regexErrors[a].patternParts.bad) + '</span>';
+					regexErrors[a].formatted += '<span class="regex-part-bad">' + htmlEncode(regexErrors[a].patternParts.bad) + '</span>';
 				}
 			}
 
@@ -603,13 +604,13 @@ $.RegexTest = function (varieties) {
 
 	function renderMatchBlock(matches) {
 		var a = 0,
-			output = $('#match-sample-item').html().replace('{{MATCH_0}}', doRenderWS(matches.wholeMatch.substr(0, state.maxLenMatch))),
+			output = $('#match-sample-item').html().replace('{{MATCH_0}}', htmlEncode(doRenderWS(matches.wholeMatch.substr(0, state.maxLenMatch)))),
 			subpatterns = '';
 
 		if (matches.subPatterns.length > 0) {
 			subpatterns = '\n\t\t\t\t\t\t\t\t\t\t<ol class="match-subpatterns">';
 			for (a = 0; a < matches.subPatterns.length; a += 1) {
-				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + doRenderWS(matches.subPatterns[a].substr(0, state.maxLenMatch)) + '</li>';
+				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + htmlEncode(doRenderWS(matches.subPatterns[a].substr(0, state.maxLenMatch))) + '</li>';
 			}
 			subpatterns += '\n\t\t\t\t\t\t\t\t\t\t</ol>\n';
 		}
@@ -621,14 +622,14 @@ $.RegexTest = function (varieties) {
 	function renderRegexBlock(regex) {
 		var a = 0,
 			errorClass = '',
-			find = HTMLencode(regex.regex.find),
+			find = htmlEncode(regex.regex.find),
 			output = $('#match-regex').html(),
 			matches = '',
 			tmp = '';
 
 		if (regex.ok === false) {
 			output = output.replace(/(^.*?class="[^"]+)/, '$1 error');
-			matches ='<p class="error-message">' + HTMLencode(regex.regex.error.message) + '</p>';
+			matches ='<p class="error-message">' + htmlEncode(regex.regex.error.message) + '</p>';
 			if (regex.regex.error.formatted !== undefined) {
 				find = regex.regex.error.formatted;
 			}
@@ -643,15 +644,15 @@ $.RegexTest = function (varieties) {
 			matches += '\n\t\t\t\t\t\t\t\t</ol>\n';
 		}
 		output = output.replace('{{ERROR_CLASS}}', errorClass);
-		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + HTMLencode(workingEngine.getDelimOpen()) + HTMLencode(regex.regex.find) + HTMLencode(workingEngine.getDelimClose()) + '</code></pre>');
+		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + htmlEncode(workingEngine.getDelimOpen()) + htmlEncode(regex.regex.find) + htmlEncode(workingEngine.getDelimClose()) + '</code></pre>');
 		if (regex.regex.modifiers !== '') {
-			tmp = '<pre class="modifiers"><code>' + HTMLencode(regex.regex.modifiers) + '</code></pre>';
+			tmp = '<pre class="modifiers"><code>' + htmlEncode(regex.regex.modifiers) + '</code></pre>';
 		} else {
 			tmp = '';
 		}
 		output = output.replace('{{REGEX_MODIFIERS}}', tmp);
 		if (regex.regex.replace !== '') {
-			tmp = '<pre class="replace"><code>' + HTMLencode(regex.regex.replace) + '</code></pre>';
+			tmp = '<pre class="replace"><code>' + htmlEncode(regex.regex.replace) + '</code></pre>';
 		} else {
 			tmp = '';
 		}
@@ -674,7 +675,7 @@ $.RegexTest = function (varieties) {
 		for (a = 0; a < sampleMatches.length; a += 1) {
 			regexes += renderRegexBlock(sampleMatches[a]);
 		}
-		output = $('#match-sample').html().replace('{{SAMPLE}}', sampleStr.substr(0, state.maxLenSamp));
+		output = $('#match-sample').html().replace('{{SAMPLE}}', htmlEncode(doRenderWS(sampleStr.substr(0, state.maxLenSamp))));
 		output = output.replace('{{MATCH_REGEX}}', regexes);
 		return output;
 	}
@@ -754,7 +755,7 @@ $.RegexTest = function (varieties) {
 			renderProblemRegex();
 		} else {
 			if (replace === true) {
-				sampleHasChanged(true)
+				sampleHasChanged(true);
 				console.log('regex find & replace');
 				regexDoer.findReplace(jsonObject, renderReturn);
 			} else {
@@ -850,6 +851,7 @@ $.RegexTest = function (varieties) {
 		new RegexEngine({
 			'name': 'Vanilla JS',
 			'modifiers': 'gimuy',
+			'placeholder': 'ig',
 			'URL': false,
 			'format': 'json', // json | xml
 			'delim': '/'
@@ -857,6 +859,7 @@ $.RegexTest = function (varieties) {
 		new RegexEngine({
 			'name': 'xRegExp JS',
 			'modifiers': 'gimuynsxA',
+			'placeholder': 'ig',
 			'URL': false,
 			'format': 'json', // json | xml
 			'delim': '/'
@@ -875,14 +878,13 @@ $.RegexTest = function (varieties) {
 		var a = 0,
 			regExpEngine;
 
-		function setPattern() {
-			$(this).attr('pattern', workingEngine.getModifiers());
-		}
 
 		for (a = 0; a < engines.length; a += 1) {
 			if (engines[a].getName() === $(this).val()) {
 				workingEngine = engines[a];
-				$('.modifiers').each(setPattern);
+				$('.modifiers').each(function () {
+					$(this).attr('pattern', '^[' + workingEngine.getModifiers() + ']+$').attr('placeholder', workingEngine.getPlaceholder());
+				});
 
 				if (workingEngine.delimIsValid(regexDelim) !== true) {
 					$(regexDelim).val(workingEngine.getDelimOpen());
