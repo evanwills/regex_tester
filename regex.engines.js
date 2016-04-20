@@ -186,13 +186,22 @@ function RegexEngine(variety) {
 	 * @return true (if modifiers are valid)
 	 */
 	this.validateModifiers = function (input) {
-		var repeatModRegex = new RegExp('([' + modifiers + ']).*?$1');
+		var msg = '',
+			repeatModRegex = new RegExp('([' + modifiers + ']).*?$1');
+		console.log('repeatModRegex = ', repeatModRegex);
+		console.log('input.match(modifierRegex) = ', input.match(modifierRegex));
 		if (typeof input !== 'string') {
-			throw {'message': 'Regex modifiers must be a string. ' + typeof input + ' given.'};
+			msg = 'Regex modifiers must be a string. ' + typeof input + ' given.';
+			console.warn(msg);
+			throw {'message': msg};
 		} else if (input.match(modifierRegex)) {
-			throw {'message': 'Regex modifiers can include up to one of each of the following characters: "' + modifiers.split('", "') + '"'};
+			msg = 'Regex modifiers can include up to one of each of the following characters: "' + modifiers.split('", "') + '"';
+			console.warn(msg);
+			throw {'message': msg};
 		} else if (input.match(repeatModRegex)) {
-			throw {'message': 'Each regex modifiers should only occure once.'};
+			msg = 'Each regex modifiers should only occure once.'
+			console.warn(msg);
+			throw {'message': msg};
 		}
 		return true;
 	};

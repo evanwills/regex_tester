@@ -774,7 +774,23 @@ $.RegexTest = function (varieties) {
 		$('#sample').val('');
 
 		addNewPair(0, 'before', false);
+		$('#regex-tab-btn a').trigger('click');
 		sampleHasChanged(true);
+
+		if (!$('#matches-tab-btn').hasClass('hide')) {
+			$('#matches-tab-btn').addClass('hide');
+		}
+		if (!$('#matches').hasClass('hide')) {
+			$('#matches').addClass('hide');
+		}
+		if (!$('#output-tab-btn').hasClass('hide')) {
+			$('#output-tab-btn').addClass('hide');
+		}
+		if (!$('#output').hasClass('hide')) {
+			$('#output').addClass('hide');
+		}
+		$('#outputContent').html('');
+		$('#matches .wrapper').html('');
 	}
 
 	this.validateRegex = function (id) {

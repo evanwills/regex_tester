@@ -54,7 +54,6 @@ class regex_tester_aggregator
 		$samples_non_empty = false;
 		if( !property_exists( $this->json , 'samples' ) || !is_array($this->json->samples) || count($this->json->samples) < 1 )
 		{
-			debug($this->json);
 			$this->errors[] = 'JSON object must contain a "samples" property that must be a non-empty array.';
 			return;
 		}

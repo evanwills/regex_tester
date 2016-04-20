@@ -19,12 +19,14 @@ $.RegexDoerJsonAjax = function () {
 	var engine,
 		output,
 		renderFunc,
-		jsonObject;
-
+		jsonObject,
+		fixPlusRegex = new RegExp(/\+/,'g'),
+		unfixPlusRegex = new RegExp(/%2b/,'g');
 
 	function onError(data) {
 //		console.log('inside onError()');
-//		console.log('JSON.parse(data.responseText) = ', JSON.parse(data.responseText));
+		console.log('data.responseText = ', data.responseText);
+		console.log('JSON.parse(data.responseText) = ', JSON.parse(data.responseText));
 		alert('Something went wrong. Check out the console message.');
 	}
 
@@ -32,12 +34,35 @@ $.RegexDoerJsonAjax = function () {
 		renderFunc(data, jsonObject);
 	}
 
+	function fixPlus(input, revert) {
+		var a = 0,
+			find = fixPlusRegex,
+			replace = '%2b';
+
+		if (revert === true) {
+			find = unfixPlusRegex;
+			replace = '+';
+		}
+
+		for (a = 0; a < input.regexPairs.length; a += 1) {
+			input.regexPairs[a].find = input.regexPairs[a].find.replace(find, replace);
+			input.regexPairs[a].replace = input.regexPairs[a].replace.replace(find, replace);
+		}
+		for (a = 0; a < input.samples.length; a += 1) {
+			input.samples[a] = input.samples[a].replace(find, replace);
+		}
+		return input;
+	}
+
 	function getAJAXobject(jsonObj) {
-		var AJAXurl = '';
+		var AJAXurl = '',
+			a = 0;
 
 		jsonObject = jsonObj;
 
+		jsonObj = fixPlus(jsonObj);
 		AJAXurl = engine.getURL() + '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
+		jsonObj = fixPlus(jsonObj, true);
 
 		return {
 			'url': AJAXurl,
