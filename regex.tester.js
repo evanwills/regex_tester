@@ -752,6 +752,7 @@ $.RegexTest = function (varieties) {
 			renderProblemRegex();
 		} else {
 			if (replace === true) {
+				sampleHasChanged(true)
 				console.log('regex find & replace');
 				regexDoer.findReplace(jsonObject, renderReturn);
 			} else {

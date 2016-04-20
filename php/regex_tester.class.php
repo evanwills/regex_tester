@@ -87,6 +87,11 @@ class regex_tester {
 		return $this->matched;
 	}
 
+	public function get_regex()
+	{
+		return $this->regex;
+	}
+
 
 	/**
 	 * @function get_obj() factory function - returns the appropriate
@@ -286,7 +291,7 @@ class regex_tester_match extends regex_tester
 	{
 		for( $a = 0 ; $a < count($input) ; $a += 1 )
 		{
-			$input[$a] = substr( $input[$a] , 0 , self::match_len );
+			$input[$a] = substr( $input[$a] , 0 , self::$match_len );
 		}
 		return $input;
 	}
@@ -315,7 +320,7 @@ class regex_tester_match extends regex_tester
 		{
 			for( $a = 0 ; $a < count($matches) ; $a += 1 )
 			{
-				$matches = $this->truncate($matches[$a]);
+				$matches[$a] = $this->truncate($matches[$a]);
 				$output['matches'][] = array( 'wholeMatch' => array_shift($matches[$a]) , 'subPatterns' => $matches[$a] );
 			}
 
@@ -346,8 +351,12 @@ class regex_tester_replace extends regex_tester
 	 */
 	public function process($sample)
 	{
-		$sample = preg_replace($this->regex, $this->replace,$sample);
-		return array( 'output' => array() , 'sample' => $sample );
+		$tmp = preg_replace( $this->regex , $this->replace , $sample );
+		if( $tmp !== $sample )
+		{
+			$this->matched = true;
+		}
+		return array( 'output' => array() , 'sample' => $tmp );
 	}
 }
 

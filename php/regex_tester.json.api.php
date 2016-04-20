@@ -79,13 +79,13 @@ else
 	$open = $close = '';
 }
 
-if( !isset($_POST['json']) || !is_string($_POST['json']) || '' === trim($_POST['json']) )
+if( !isset($_REQUEST['json']) || !is_string($_REQUEST['json']) || '' === trim($_REQUEST['json']) )
 {
-	echo "{'success': false, 'message': 'You must supply a \"json\" POST variable with all the API required values. (See <a href=\"https://github.com/evanwills/regex_tester\">Regex Tester</a> for more info.)'}";
+	echo '{"success": false, "message": "You must supply a \"json\" POST variable with all the API required values. (See <a href=\"https://github.com/evanwills/regex_tester\">Regex Tester</a> for more info.)", "_SERVER": '.json_encode(($_SERVER)).', "_POST": '.json_encode(($_POST)).', "_GET": '.json_encode(($_GET)).'}';
 	exit;
 }
 
-$aggregator = new regex_tester_aggregator($_POST['json']);
+$aggregator = new regex_tester_aggregator($_REQUEST['json']);
 
 if( $aggregator->all_good() === true )
 {

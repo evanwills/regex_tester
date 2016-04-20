@@ -25,6 +25,7 @@ $.RegexDoerJsonAjax = function () {
 	function onError(data) {
 		console.log('inside onError()');
 		console.log('onError(data) = ', data);
+		console.log('JSON.parse(data.responseText) = ', JSON.parse(data.responseText));
 		console.log('jsonObject = ', jsonObject);
 		console.log('renderFunc = ', renderFunc);
 		alert('Something went wrong. Check out the console message.');
@@ -35,52 +36,46 @@ $.RegexDoerJsonAjax = function () {
 		console.log('onSuccess(data) = ', data);
 		console.log('jsonObject = ', jsonObject);
 		console.log('renderFunc = ', renderFunc);
+		renderFunc(data, jsonObject);
 	}
 
-
-	this.findReplace = function (jsonObj, renderer) {
+	function getAJAXobject(jsonObj) {
 		var AJAXurl = '';
 
 		jsonObject = jsonObj;
-		renderFunc = renderer;
 
-		AJAXurl = '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
-		console.log(AJAXurl);
+		AJAXurl = engine.getURL() + '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
+		console.log('AJAXurl = ', AJAXurl);
+		console.log('JSON.stringify(jsonObj) = ', JSON.stringify(jsonObj));
+
+		return {
+			'url': AJAXurl,
+			'dataType': "json",
+			'error': onError,
+			'success': onSuccess
+		};
+	}
+
+	this.findReplace = function (jsonObj, renderer) {
+		renderFunc = renderer;
 
 		$('#loadingText').html('Loading. Please wait...');
 
-		$.ajax({
-			'url': AJAXurl,
-			'dataType': engine.getURL(),
-			'error': onError,
-			'success': onSuccess
-		});
+		$.ajax(getAJAXobject(jsonObj));
 	};
 
 	this.testRegex = function (jsonObj, renderer) {
-		var AJAXurl = '';
-
-		jsonObject = jsonObj;
 		renderFunc = renderer;
-
-		AJAXurl = '?json=' + JSON.stringify(jsonObj) + '&jquery=true&callback=?';
-		console.log(AJAXurl);
 
 		$('#loadingText').html('Loading. Please wait...');
 
-		$.ajax({
-			'url': AJAXurl,
-			'dataType': engine.getURL(),
-			'error': onError,
-			'success': onSuccess
-		});
+		$.ajax(getAJAXobject(jsonObj));
 	};
 
 	this.validateRegex = function (regex, modifiers, delim) {};
 
 	this.setEngine = function (regexEngineObj) {
-		if( regexEngineObj instanceof RegexEngine !== true )
-		{
+		if (regexEngineObj instanceof RegexEngine !== true) {
 			throw {'message': 'RegexDoerLocal::setEngine() expects only parameter regexEngineObj to be an instance of RegexEngine'};
 		}
 		engine = regexEngineObj;

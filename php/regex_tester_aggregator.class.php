@@ -171,17 +171,17 @@ class regex_tester_aggregator
 
 			for( $b = 0 ; $b < count($this->regex_pairs) ; $b += 1 )
 			{
-				$tmp_inner = $this->regex_pairs[$a]->process($this->json->samples[$a]);
+				$tmp_inner = $this->regex_pairs[$b]->process($this->json->samples[$a]);
 				$tmp['sampleMatches'][] = $tmp_inner['output'];
-				$this->json->sample[$a] = $tmp_inner['sample'];
+				$this->json->samples[$a] = $tmp_inner['sample'];
 				if( $this->matched === false )
 				{
-					$this->matched = $this->regex_pairs[$a]->something_matched();
+					$this->matched = $this->regex_pairs[$b]->something_matched();
 				}
 			}
 			if( $this->do_replace === true )
 			{
-				$tmp['sampleMatches'] = array($this->json->samples[$a]);
+				$tmp = $this->json->samples[$a];
 			}
 			$this->output[] = $tmp;
 		}
