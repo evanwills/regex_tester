@@ -174,5 +174,5 @@ __NOTE__: If nothing was matched but there were no errors, 'matched' must be fal
 	*	[Ember JS](https://emberjs.com/)
 	*	[Angular JS](https:angularjs.org/)
 	*	[Ractive JS](http://ractivejs.org/)
-	*	[React JS](https://facebook.github.io/react)
+	*	[React JS](https://facebook.github.io/react) ([Shasta](http://shata.tools "Opinionated React"))
 4.	move jQuery version to its own branch and push vanilla javascript version to master
