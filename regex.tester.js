@@ -642,7 +642,7 @@ $.RegexTest = function (varieties) {
 			matches += '\n\t\t\t\t\t\t\t\t</ol>\n';
 		}
 		output = output.replace('{{ERROR_CLASS}}', errorClass);
-		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + HTMLencode(regex.regex.find) + '</code></pre>');
+		output = output.replace('{{REGEX_FIND}}', '<pre class="find"><code>' + HTMLencode(workingEngine.getDelimOpen()) + HTMLencode(regex.regex.find) + HTMLencode(workingEngine.getDelimClose()) + '</code></pre>');
 		if (regex.regex.modifiers !== '') {
 			tmp = '<pre class="modifiers"><code>' + HTMLencode(regex.regex.modifiers) + '</code></pre>';
 		} else {
