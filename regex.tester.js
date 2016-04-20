@@ -27,6 +27,7 @@ $.RegexTest = function (varieties) {
 		parsedSample = [],
 		regexDelim = '#regex_delim',
 		regexDoer,
+		resetBtn = '#resetBtn',
 		sampleDelim = '#split_delim',
 		sampleField = '#sample',
 		splitSample = '#split_sample',
@@ -739,6 +740,7 @@ $.RegexTest = function (varieties) {
 			}
 		}
 
+		$('.engine_type').html(workingEngine.getName());
 	}
 
 
@@ -762,6 +764,17 @@ $.RegexTest = function (varieties) {
 		}
 	}
 
+	function clearAllFields(event) {
+		var c = $('#regexes-pairs .regexPair').length;
+
+		event.preventDefault();
+
+		$('#regexes-pairs').html('');
+		$('#sample').val('');
+
+		addNewPair(0, 'before', false);
+		sampleHasChanged(true);
+	}
 
 	this.validateRegex = function (id) {
 		var jsonObject = buildJSONobject();
@@ -922,5 +935,6 @@ $.RegexTest = function (varieties) {
 
 	$(sampleDelim).on('change', function () { sampleHasChanged(true); });
 	$(renderWs).on('change', setRenderWSfunc);
+	$(resetBtn).on('click', clearAllFields);
 };
 

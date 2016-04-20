@@ -10,6 +10,9 @@ label span, #butt label {
     position: absolute;
     top: -1000em;
 }
+label span.engine_type {
+	position: static;
+}
 #input textarea {
     min-height: 25em;
 }
@@ -390,7 +393,7 @@ span.whole::after {
     border-bottom-right-radius: 1.5em;
     border-top-right-radius: 1.5em;
 }
-#settingsBtn { border-radius: 50%; }
+.btn.btn-round { border-radius: 50%; }
 .regex-error {
 //    background-color: #fcc;
     padding-top: 1.7em;
@@ -451,6 +454,11 @@ pre.find {
 pre.modifiers {
 	background-color: transparent;
 }
+pre.modifiers:before {
+	content: 'Modifiers: ';
+	font-weight: bold;
+	font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 pre.replace {
 	background-color: #eef;
 }
@@ -460,7 +468,9 @@ pre.replace {
     top: -1000em;
 }
 .error-message { font-weight: bold; }
-
+legend.h2 label {
+	font-weight: normal;
+}
 @media (max-width: 52em) {
 	.frInputWrap {
 		display: table;
@@ -503,10 +513,15 @@ pre.replace {
 	a[rel="sidebar"] {
 		display: none;
 	}
-	#settingsBtn {
+	.btn-round {
 		position: absolute;
+		bottom: 0.75em;
+	}
+	#settingsBtn {
 		right: 0.4em;
-		bottom: 0.5em;
+	}
+	#resetBtn {
+		left: 0.4em;
 	}
 }
 @media (max-width: 19em) {
@@ -516,7 +531,7 @@ pre.replace {
 	.frInputWrap input, .frInputWrap textarea {
 		display: block;
 	}
-	#settingsBtn {
+	.btn-round {
 		position: static !important;
 	}
 }

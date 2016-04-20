@@ -22,13 +22,13 @@
 
 			<div class="tab-content">
 				<fieldset id="input" class="tab-pane fade">
-					<legend>Sample</legend>
+					<legend class="h2">Sample</legend>
 					<textarea id="sample" name="sample" class="form-control" data-hasChanged="false"></textarea>
 				</fieldset>
 
 
 				<fieldset id="regexes" class="tab-pane fade in active in">
-					<legend>Regular Expressions</legend>
+					<legend class="h2">Regular Expressions</legend>
 					<p class="note"><strong>Note:</strong> <span class="warning">Do not</span> use opening and closing delimiters. If regexes are sent to the server, back ticks (`) will automatically inserted as opening and closing delimiters.</p>
 					<ol id="regexes-pairs" class="regexes">
 {{regexPair}}
@@ -37,14 +37,14 @@
 
 
 				<div id="matches" class="tab-pane fade hide">
-					<h2>Result of regex matching</h2>
+					<h2>Matching with <span class="engine_type"></span></h2>
 
 					<div class="wrapper"></div>
 				</div>
 
 
 				<fieldset id="output" class="tab-pane fade hide">
-					<legend><label for="outputContent">Output of regex find &amp; replaces</label></legend>
+					<legend class="h2"><label for="outputContent">Find &amp; replaces with <span class="engine_type"></span></label></legend>
 
 
 					<textarea id="outputContent" name="outputContent" readonly="readonly"></textarea>
@@ -191,8 +191,13 @@
 					--><label for="replace">Use the regular expressions to do a find and replace</label><!--
 					--><input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change b-right" />
 				</p>
-				<button type="button" id="settingsBtn" class="btn btn-primary btn-sm pull-right" data-toggle="modal" data-target="#settings">
+
+				<button type="button" id="settingsBtn" class="btn btn-primary btn-sm pull-right btn-round" data-toggle="modal" data-target="#settings" title="Change settings">
 					<spna class="sr-only">Settings</spna> <span class="glyphicon glyphicon-cog"></span>
+				</button>
+
+				<button type="button" id="resetBtn" class="btn btn-primary btn-sm pull-left btn-round" title="Clear sample and remove all regex fields">
+					<spna class="sr-only">Reset</spna> <span class="glyphicon glyphicon-remove-sign"></span>
 				</button>
 			</fieldset>
 		</form>
@@ -216,11 +221,11 @@
 
 								<span class="col-xs-12 col-sm-6 checkbox-check">
 									<label for="modifiers{{ID}}">
-										<input type="text" name="regex[{{ID}}][modifiers]" id="modifiers{{ID}}" value="" title="List of Regular Expression pattern modifiers for Find {{ITEM}}" class="modifiers" size="3" pattern="[gimy]+|[imsxeADSXUJu]+" placeholder="ig" maxlength="12" />
+										<input type="text" name="regex[{{ID}}][modifiers]" id="modifiers{{ID}}" class="modifiers" value="" title="List of Regular Expression pattern modifiers for Find {{ITEM}}" class="modifiers" size="3" pattern="[gimy]+|[imsxeADSXUJu]+" placeholder="ig" maxlength="12" />
 										Pattern modifiers
 									</label>
 									<label for="makeTextarea{{ID}}">
-										<input type="checkbox" name="regex[{{ID}}][makeTextarea]" id="makeTextarea{{ID}}" value="textarea" data-regex="{{ID}}" title="Make Find {{ITEM}} and Replace {{ITEM}} multi line"{{CHECKED}} />
+										<input type="checkbox" name="regex[{{ID}}][makeTextarea]" id="makeTextarea{{ID}}" class="makeTextarea" value="textarea" data-regex="{{ID}}" title="Make Find {{ITEM}} and Replace {{ITEM}} multi line"{{CHECKED}} />
 										Multi line
 									</label>
 								</span>
