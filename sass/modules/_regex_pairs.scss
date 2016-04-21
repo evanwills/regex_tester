@@ -1,0 +1,50 @@
+.regexPair {
+	.add-remove {
+		display: none;
+	}
+	&:hover .add-remove {
+		display: block
+	}
+
+	input, textarea {
+		border: 0.1em solid #ddd;
+		border-radius: 0.3em;
+		font-family: monospace;
+		margin-top: 0.2em;
+		padding: 0.3em 0.5em;
+		width: 100%;
+	}
+
+	.replace {
+		background-color: #eef;
+	}
+	.find {
+		background-color: #dfd;
+	}
+}
+
+
+.regex-error {
+//    background-color: #fcc;
+    padding-top: 1.7em;
+
+	.find {
+		background-color: #fcc;
+	}
+}
+
+
+.error-msg {
+    padding: 0.65em 1.75em 0.65em 1em;
+    background-color: #f00;
+    color: #fff;
+    display: block;
+    position: relative;
+    top: -1.7em;
+
+	&:before {
+		content: 'Regex error: ';
+		color: #ff0;
+		font-weight: bold;
+	}
+}

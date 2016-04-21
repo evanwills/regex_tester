@@ -1,0 +1,56 @@
+.match-sample {
+	border-top: 0.1em solid #ccc;
+	padding-top: 1em;
+	margin-bottom: 1em;
+
+	&:first-child {
+		border-top: none;
+		padding-top: 0%;
+	}
+}
+
+.regex-match-item {
+	padding: 1em;
+	border: 0.1em dotted #ddd;
+
+	&.has-error {
+		background-color: #f00;
+		color: #ff0;
+	}
+}
+
+
+.match-match {
+	padding-left: 1.5em;
+	> li {
+		list-style-type: lower-alpha;
+		padding-left: 1em;
+	}
+}
+.whole-match:before {
+	content: 'Whole match: ';
+	font-weight: bold;
+}
+
+.match-subpatterns:before {
+	content: 'Sub-patterns: ';
+	display: block;
+	text-indent: -3em;
+	font-weight: bold;
+}
+pre {
+	&.find {
+		background-color: #ffe;
+	}
+	&.modifiers {
+		background-color: transparent;
+	}
+	&.modifiers:before {
+		content: 'Modifiers: ';
+		font-weight: bold;
+		font-family:  "Helvetica Neue", Helvetica, Arial, sans-serif;
+	}
+	&.replace {
+		background-color: #eef;
+	}
+}
