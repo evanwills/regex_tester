@@ -1,0 +1,9 @@
+
+.tab-content {
+	.tab-block {
+		display: none;
+	}
+	input.tab-control:checked + .tab-block {
+		display: block;
+	}
+}
