@@ -393,7 +393,12 @@ span.whole::after {
     border-bottom-right-radius: 1.5em;
     border-top-right-radius: 1.5em;
 }
-.btn.btn-round { border-radius: 50%; }
+.btn.btn-round {
+	border-radius: 50%;
+	padding-left: 0.65em;
+	padding-right: 0.65em;
+	padding-bottom: 0.4em;
+}
 .regex-error {
 //    background-color: #fcc;
     padding-top: 1.7em;
