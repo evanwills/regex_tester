@@ -1,0 +1,9 @@
+.hide { display: none !important; }
+
+@media screen, print {
+	.sr-only {
+		position: absolute !important;
+		left: -1000em !important;
+		top: -1000em !important;
+	}
+}

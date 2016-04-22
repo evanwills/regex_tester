@@ -1,9 +1,55 @@
 
 .tab-content {
-	.tab-block {
+	position: relative;
+	padding: 2em 1em 1em;
+	margin-top: 3em;
+	border-top: $border-width $border-style $border-color;
+
+	.tab-pane {
 		display: none;
+		position: absolute;
+		top: 1em;
+		right: 0%;
+		bottom: 0%;
+		left: 0%;
+		fieldset {
+			border: none;
+		}
 	}
-	input.tab-control:checked + .tab-block {
-		display: block;
+
+
+	input.tab-control {
+		position: absolute;
+		top: -1000em;
+		left: -1000em;
+		+ label {
+			margin-left: 0%;
+			padding-left: 0%;
+			display: inline-block;
+			padding: 0.5em 1em;
+			border: $border-width $border-style $border-color;
+			border-top-left-radius: $border-radius;
+			border-top-right-radius: $border-radius;
+			border-bottom: none;
+			position: relative;
+			top: -4.2em;
+			// Needs latest Compass, add '@import "compass"' to your scss
+			// Permalink - use to edit and share this gradient:
+			// http://colorzilla.com/gradient-editor/#e5e5e5+1,748599+100
+			background-color: #ffffff; // Old browsers
+			@include background-image(linear-gradient(top, #ffffff 21%,#d0d2dd 100%));
+			cursor: pointer;
+		}
+		&:checked + label {
+			background: $background-color;
+			color: $font-color;
+			font-weight: bold;
+			cursor: default;
+			 + .tab-pane {
+				display: block;
+			}
+		}
+
+
 	}
 }

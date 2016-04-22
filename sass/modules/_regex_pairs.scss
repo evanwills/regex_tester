@@ -6,13 +6,16 @@
 		display: block
 	}
 
-	input, textarea {
+	input[type="text"], input[type="email"], textarea {
 		border: 0.1em solid #ddd;
 		border-radius: 0.3em;
 		font-family: monospace;
 		margin-top: 0.2em;
 		padding: 0.3em 0.5em;
 		width: 100%;
+	}
+	input.modifiers {
+		width: auto;
 	}
 
 	.replace {

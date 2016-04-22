@@ -1,0 +1,45 @@
+@mixin modal-sizes() {
+	.modal-content__lg-full {
+		left: 2em;
+		right: 2em;
+		top: 2em;
+		bottom: 2em;
+		margin-left: auto;
+		width: auto;
+	}
+	.modal-content__lg-50 {
+		right: auto;
+		bottom: auto;
+		left: 50%;
+		margin-left: -26%;
+		width: 50%;
+	}
+	.modal-content__lg-60 {
+		right: auto;
+		bottom: auto;
+		left: 50%;
+		margin-left: -32%;
+		width: 60%;
+	}
+	.modal-content__lg-70 {
+		right: auto;
+		bottom: auto;
+		left: 50%;
+		margin-left: -37%;
+		width: 70%;
+	}
+	.modal-content__lg-80 {
+		right: auto;
+		bottom: auto;
+		left: 50%;
+		margin-left: -43%;
+		width: 80%;
+	}
+	.modal-content__lg-90 {
+		right: auto;
+		bottom: auto;
+		left: 50%;
+		margin-left: -47%;
+		width: 90%;
+	}
+}

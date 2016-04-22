@@ -1,0 +1,79 @@
+@media screen {
+	.modal > {
+		.modal-content {
+			display: none;
+		}
+
+		input.modal-control:checked + label + .modal-content {
+			display: block
+		}
+	}
+	.modal-content {
+		position: absolute;
+		top: 5em;
+		right: 5em;
+		bottom: 5em;
+		left: 5em;
+		background-color: $background-color;
+		padding: 1em;
+		overflow-y: auto;
+		border-radius: 0.4em;
+		box-shadow: 0.5em 0.5em 1.5em rgba(0,0,0,0.7);
+		border: 0.05em solid #002;
+		z-index: 100000;
+	}
+
+	input.modal-control {
+		position: absolute;
+		top: -10000em;
+		left: -10000em;
+
+		+ label {
+			.modal-closed {
+				display: inline-block;
+				position: absolute;
+				bottom: 0.5em;
+				right: 0.5em;
+				z-index: 1;
+			}
+			.modal-open {
+				display: none;
+			}
+		}
+		&:checked + label {
+
+			position: fixed;
+			top: 0%;
+			right: 0%;
+			bottom: 0%;
+			left: 0%;
+			background-color: #005;
+			background-color: rgba( 0 , 0 , 50 , 0.8 );
+			z-index: 10000;
+
+			.modal-closed {
+				display: none;
+			}
+			.modal-open {
+				display: inline-block;
+			}
+		}
+	}
+
+}
+
+@media (min-width: 993px) {
+	@include modal-sizes();
+}
+@media screen and (max-width: 992px) {
+	@include modal-sizes();
+}
+@media screen and (max-width: 768px) {
+	@include modal-sizes();
+}
+@media screen and (max-width: 430px) {
+	@include modal-sizes	();
+}
+@media aural braille {
+	.modal-control , .modal-control-label { display: none; }
+}

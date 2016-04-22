@@ -1,5 +1,7 @@
 // Colours
 
+$font-color: #222;
+$background-color: #fff;
 $light-grey: #ddd;
 $light-green: #dfd;
 $light-blue: #eef;
@@ -7,13 +9,13 @@ $light-blue: #eef;
 // Fonts
 
 $font: arial, helvetica, sans-serif;
-$heading-font: verdana, $font-text;
+$heading-font: verdana, $font;
 
 $font-size: 16px;
 
 
 // Borders
 $border-color: $light-grey;
-$border-width: 0.1em;
+$border-width: 0.05em;
 $border-style: solid;
 $border-radius: 0.3em;
