@@ -2,7 +2,20 @@
 
 @import "variables";
 @import "mixins";
+@import "defaults";
+@import "utilities";
+
+@import "content/forms";
+@import "content/buttons";
+@import "content/headings";
+@import "content/lists";
+
+@import "modules/tabs";
+@import "modules/modals";
+
 @import "modules/regex_pairs";
 @import "modules/matches";
-@import "modules/buttons";
-@import "modules/tabs"
+@import "modules/samples";
+
+@import "modules/layout";
+@import "modules/settings_styles";
