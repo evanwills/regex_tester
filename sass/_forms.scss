@@ -1,7 +1,12 @@
 fieldset {
 	border: none;
-	legend {
-		position: relative;
-		top: 1.5em;
+	fieldset {
+		padding-right: 0%;
+		padding-left: 0%;
 	}
+}
+
+legend {
+	position: relative;
+//	top: 1.5em;
 }
