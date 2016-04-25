@@ -1,0 +1,6 @@
+.main-setting:nth-child(1n + 2) > legend {
+	border-top: (2 * $border-width)  $border-style $border-color;
+	padding-top: 1em;
+	display: block;
+	width: 100%;
+}
