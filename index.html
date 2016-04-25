@@ -62,10 +62,10 @@
 					<span class="modal-open btn btn-sm btn-primary">Close General Settings</span>
 				</label>
 				<div class="modal-content">
-					<label for="settingsControl" class="btn">Close</label>
+					<label for="settingsControl" class="btn modal-close">Close</label>
 					<div class="modal-body">
 
-						<fieldset id="regexEngines">
+						<fieldset id="regexSettinga" class="main-setting">
 							<legend class="h3">Regular Expression settings</legend>
 
 							<fieldset id="regexEngines">
@@ -92,11 +92,11 @@
 						</fieldset>
 
 
-						<fieldset id="sampleSettings">
+						<fieldset id="sampleSettings" class="main-setting">
 							<legend class="h3">Sample settings</legend>
 
 							<!-- <h3>Clean white space options</h3> -->
-							<ul class="inline">
+							<ul class="list-inline">
 								<li>
 									<label>
 										<input type="checkbox" name="ws_trim" id="ws_trim" value="true" tabindex="19" />
@@ -119,7 +119,7 @@
 							</ul>
 
 							<!-- <h3>Split sample</h3> -->
-							<ul class="inline">
+							<ul class="list-inline">
 								<li>
 									<label>
 										<input type="checkbox" name="split_sample" id="split_sample" value="true" tabindex="22" />
@@ -135,7 +135,7 @@
 							</ul>
 						</fieldset>
 
-						<fieldset id="renderMatchPatterns">
+						<fieldset id="renderMatchPatterns" class="main-setting">
 							<legend class="h3">Rendering settings</legend>
 
 							<fieldset id="renderMatchPatterns">
@@ -182,7 +182,7 @@
 						</fieldset>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<label for="settingsControl" class="btn">Close</label>
 					</div>
 				</div>
 			</div>
@@ -190,10 +190,10 @@
 			<fieldset id="butt">
 				<legend class="h2 sr-only">Submit details</legend>
 				<p>
-					<label for="test" class="sr-only">Test the regular expressions against the sample only</label><!--
-					--><input type="submit" name="submit_test" id="submitTest" value="Test only" title="Test regex and sample only" class="btn btn-success test btn-left btn-sm" /><!--
-					--><label for="replace" class="sr-only">Use the regular expressions to do a find and replace</label><!--
-					--><input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change btn-right btn-sm" />
+					<label for="test" class="sr-only">Test the regular expressions against the sample only</label>
+					<input type="submit" name="submit_test" id="submitTest" value="Test only" title="Test regex and sample only" class="btn btn-success test btn-pointy-left btn-sm" />
+					<label for="replace" class="sr-only">Use the regular expressions to do a find and replace</label>
+					<input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change btn-pointy-right btn-sm" />
 				</p>
 
 				<button type="button" id="resetBtn" class="btn btn-primary btn-sm pull-left btn-round" title="Clear sample and remove all regex fields">
@@ -209,43 +209,47 @@
 
 						<li id="regexp{{ID}}" class="regexPair row" data-regex="{{ID}}">
 							<fieldset id="findReplace{{ID}}">
-								<span class="frInputWrap col-sm-6 col-xs-12">
-									<label for="find{{ID}}" class="hiding">Find <span>{{ITEM}}</span></label>
-									{{FIND}}
-								</span>
+								<div class="flex">
+									<div class="frInputWrap flex-item">
+										<label for="find{{ID}}" class="hiding">Find <span>{{ITEM}}</span></label>
+										{{FIND}}
+									</div>
 
-								<span class="frInputWrap col-sm-6 col-xs-12">
-									<label for="replace{{ID}}" class="hiding">Replace <span>{{ITEM}}</span></label>
-									{{REPLACE}}
-								</span>
+									<div class="frInputWrap flex-item">
+										<label for="replace{{ID}}" class="hiding">Replace <span>{{ITEM}}</span></label>
+										{{REPLACE}}
+									</div>
 
-								<span class="col-xs-12 col-sm-6 checkbox-check">
-									<label for="modifiers{{ID}}">
-										<input type="text" name="regex[{{ID}}][modifiers]" id="modifiers{{ID}}" class="modifiers" value="" title="List of Regular Expression pattern modifiers for Find {{ITEM}}" class="modifiers" size="3" pattern="[gimy]+" placeholder="ig" maxlength="12" />
-										Pattern modifiers
-									</label>
-									<label for="makeTextarea{{ID}}">
-										<input type="checkbox" name="regex[{{ID}}][makeTextarea]" id="makeTextarea{{ID}}" class="makeTextarea" value="textarea" data-regex="{{ID}}" title="Make Find {{ITEM}} and Replace {{ITEM}} multi line"{{CHECKED}} />
-										Multi line
-									</label>
-								</span>
-								<span class="col-xs-12 col-sm-6 add-remove">
-									<!-- <label for="addBefore{{ID}}"> -->
-										<button id="addBefore{{ID}}" class="btn btn-info btn-xs btn-left add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
-									<!-- </label> -->
+									<div class="checkbox-check flex-item">
+										<label for="modifiers{{ID}}">
+											<input type="text" name="regex[{{ID}}][modifiers]" id="modifiers{{ID}}" class="modifiers" value="" title="List of Regular Expression pattern modifiers for Find {{ITEM}}" class="modifiers" size="3" pattern="[gimy]+" placeholder="ig" maxlength="12" />
+											Pattern modifiers
+										</label>
+										<label for="makeTextarea{{ID}}">
+											<input type="checkbox" name="regex[{{ID}}][makeTextarea]" id="makeTextarea{{ID}}" class="makeTextarea" value="textarea" data-regex="{{ID}}" title="Make Find {{ITEM}} and Replace {{ITEM}} multi line"{{CHECKED}} />
+											Multi line
+										</label>
+									</div>
+									<div class="add-remove flex-item">
+										<!-- <label for="addBefore{{ID}}"> -->
+											<button id="addBefore{{ID}}" class="btn btn-info btn-xs btn-left add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
+										<!-- </label> -->
 
-									<!-- <label for="remove{{ID}}"> -->
-										<button id="remove{{ID}}" class="btn btn-warning btn-xs remove-pairs" data-regex="{{ID}}"><span class="glyphicon glyphicon-minu"></span> Remove <span class="sr-only">this find/replace pair {{ITEM}}</span></button>
-									<!-- </label> -->
+										<!-- <label for="remove{{ID}}"> -->
+											<button id="remove{{ID}}" class="btn btn-warning btn-xs remove-pairs" data-regex="{{ID}}"><span class="glyphicon glyphicon-minu"></span> Remove <span class="sr-only">this find/replace pair {{ITEM}}</span></button>
+										<!-- </label> -->
 
-									<!-- <label for="addAfter{{ID}}"> -->
-										<button id="addAfter{{ID}}" class="btn btn-info btn-xs btn-right add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
-									<!-- </label> -->
+										<!-- <label for="addAfter{{ID}}"> -->
+											<button id="addAfter{{ID}}" class="btn btn-info btn-xs btn-right add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
+										<!-- </label> -->
 
-									<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
+										<div class="add-remove__note">
+											<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
 
-									<p class="note"><strong>NOTE:</strong> Pairs with no pattern in the "Find" field will be ignored.</p>
-								</span>
+											<p class="note"><strong>NOTE:</strong> Pairs with no pattern in the "Find" field will be ignored.</p>
+										</div>
+									</div>
+								</div>
 							</fieldset>
 						</li>
 

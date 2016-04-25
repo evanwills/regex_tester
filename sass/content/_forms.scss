@@ -10,3 +10,6 @@ legend {
 	position: relative;
 //	top: 1.5em;
 }
+label.disabled {
+	color: adjust-lightness($font-color, 50%);
+}
