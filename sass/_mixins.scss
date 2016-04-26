@@ -43,3 +43,48 @@
 		width: 90%;
 	}
 }
+
+@mixin gradient-hover($selector, $colour1, $pos1, $colour2, $pos2, $colour3, $pos3, $colour4, $pos4) {
+
+	$colour1Darker: adjust-lightness($colour1 -25%);
+	$colour2Darker: adjust-lightness($colour2 -25%);
+
+	@if $colour3 == null {
+		%#{$selector} {
+			background-color: $colour1;
+			@include background-image(linear-gradient(top, $colour1 $pos1, $colour2 $pos2));
+		}
+
+		%#{$selector}:hover {
+			background-color: $colour1;
+			@include background-image(linear-gradient(top, $colour1Darker $pos1, $colour2Darker $pos2));
+		}
+	}
+	@else {
+		$colour3Darker: adjust-lightness($colour3 -25%);
+
+		@if $colour4 == null {
+			%#{$selector} {
+				background-color: $colour1;
+				@include background-image(linear-gradient(top, $colour1 $pos1, $colour2 $pos2, $colour3 $pos3));
+			}
+
+			%#{$selector}:hover {
+				background-color: $colour1;
+				@include background-image(linear-gradient(top, $colour1Darker $pos1, $colour2Darker $pos2, $colour3Darker $pos3));
+			}
+		}
+		@else {
+			$colour4Darker: adjust-lightness($colour4 -25%);
+			%#{$selector} {
+				background-color: $colour1;
+				@include background-image(linear-gradient(top, $colour1 $pos1, $colour2 $pos2, $colour3 $pos3, $colour4 $pos4));
+			}
+
+			%#{$selector}:hover {
+				background-color: $colour1;
+				@include background-image(linear-gradient(top, $colour1Darker $pos1, $colour2Darker $pos2, $colour3Darker $pos3, $colour4Darker $pos4));
+			}
+		}
+	}
+}

@@ -41,9 +41,21 @@
 		padding-bottom: 0.4em;
 	}
 
+	@include gradient-hover( #{&}.btn-default,	 	#f7f2f2, 0%, #ffeaea, 33%, #c6c6c6, 100% );
+	@include gradient-hover( &.btn-primary,	 	#8b89ed, 0%, #616fed, 33%, #252cea, 100% );
+	@include gradient-hover( &.btn-secondary,	#8b89ed, 0%, #616fed, 33%, #252cea, 100% );
+	@include gradient-hover( &.btn-success,		 #f8ffe8, 0%, #e3f5ab 33%, #79ce7f, 100% );
+	@include gradient-hover( &.btn-info,		 #e1e575, 0%, #eff257, 33%, #acb200, 100% );
+	@include gradient-hover( &.btn-warning,		 #8b89ed, 0%, #616fed, 33%, #252cea, 100% );
+	@include gradient-hover( &.btn-danger,		 #8b89ed, 0%, #616fed, 33%, #252cea, 100% );
+/*
 	&.btn-default {
 		background-color: #f7f2f2; // Old browsers
 		@include background-image(linear-gradient(top, #f7f2f2 0%,#ffeaea 33%,#c6c6c6 100%));
+	}
+	&.btn-default:hover {
+
+		@include gradient-hover(linear-gradient(top, #f7f2f2 0%,#ffeaea 33%,#c6c6c6 100%));
 	}
 
 	&.btn-primary {
@@ -59,7 +71,7 @@
 	}
 
 	&.btn-success {
-		background-color: #f8ffe8; /* Old browsers */
+		background-color: #f8ffe8; // Old browsers
 		@include background-image(linear-gradient(top, #f8ffe8 0%,#e3f5ab 33%,#79ce7f 100%));
 	}
 
@@ -78,7 +90,7 @@
 		background-color: #ff6554; // Old browsers
 		@include background-image(linear-gradient(top, #ff6554 0%,#ff1a00 100%));
 	}
-
+*/
 	&.btn-xl {
 		font-size: 125%;
 	}
