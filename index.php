@@ -18,10 +18,10 @@
 
 			<div class="tab-content">
 <?php
-require_once('HTML-includes/templates/input.tab.html');
-require_once('HTML-includes/templates/regex-pairs.tab.html');
-require_once('HTML-includes/templates/matches.tab.html');
-require_once('HTML-includes/templates/output.tab.html');
+require_once('HTML-includes/input.tab.html');
+require_once('HTML-includes/regex-pairs.tab.html');
+require_once('HTML-includes/matches.tab.html');
+require_once('HTML-includes/output.tab.html');
 ?>
 			</div>
 
@@ -51,15 +51,10 @@ require_once('HTML-includes/templates/match-regex.tmpl.html');
 <!--  END:  templates -->
 
 		<!-- <a href="<?php echo $_SERVER['REQUEST_URI']; ?>" rel="sidebar" title="Regex Debugger (JS/PHP)">Install as sidebar</a> -->
-		<script type="text/javascript" src="jquery-2.2.1.min.js"></script>
-		<!-- <script type="text/javascript" src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script> -->
-		<script type="text/javascript" src="xregexp/xregexp-all.js"></script>
-		<script type="text/javascript" src="regex.engines.js"></script>
-		<script type="text/javascript" src="regexDoer.Local.js"></script>
-		<script type="text/javascript" src="regexDoer.RemoteJSON.js"></script>
-		<script type="text/javascript" src="regexDoer.RemoteXML.js"></script>
-		<script type="text/javascript" src="regex.tester.js"></script>
-		<script type="text/javascript" src="regexTester.init.js"></script>
-		<script type="text/javascript" src="regexTesterDevDefaults.js"></script>
+
+<?php
+require_once('HTML-includes/footer-js.html');
+?>
+
 	</body>
 </html>
