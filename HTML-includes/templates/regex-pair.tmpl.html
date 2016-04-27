@@ -1,0 +1,49 @@
+			<div id="instance">
+
+						<li id="regexp{{ID}}" class="regexPair row" data-regex="{{ID}}">
+							<fieldset id="findReplace{{ID}}">
+								<div class="flex">
+									<div class="frInputWrap flex-item">
+										<label for="find{{ID}}" class="hiding">Find <span>{{ITEM}}</span></label>
+										{{FIND}}
+									</div>
+
+									<div class="frInputWrap flex-item">
+										<label for="replace{{ID}}" class="hiding">Replace <span>{{ITEM}}</span></label>
+										{{REPLACE}}
+									</div>
+
+									<div class="checkbox-check flex-item">
+										<label for="modifiers{{ID}}">
+											<input type="text" name="regex[{{ID}}][modifiers]" id="modifiers{{ID}}" class="modifiers" value="" title="List of Regular Expression pattern modifiers for Find {{ITEM}}" class="modifiers" size="3" pattern="[gimy]+" placeholder="ig" maxlength="12" />
+											Pattern modifiers
+										</label>
+										<label for="makeTextarea{{ID}}">
+											<input type="checkbox" name="regex[{{ID}}][makeTextarea]" id="makeTextarea{{ID}}" class="makeTextarea" value="textarea" data-regex="{{ID}}" title="Make Find {{ITEM}} and Replace {{ITEM}} multi line"{{CHECKED}} />
+											Multi line
+										</label>
+									</div>
+									<div class="add-remove flex-item">
+										<!-- <label for="addBefore{{ID}}"> -->
+											<button id="addBefore{{ID}}" class="btn btn-info btn-xs btn-left add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
+										<!-- </label> -->
+
+										<!-- <label for="remove{{ID}}"> -->
+											<button id="remove{{ID}}" class="btn btn-warning btn-xs remove-pairs" data-regex="{{ID}}"><span class="glyphicon glyphicon-minu"></span> Remove <span class="sr-only">this find/replace pair {{ITEM}}</span></button>
+										<!-- </label> -->
+
+										<!-- <label for="addAfter{{ID}}"> -->
+											<button id="addAfter{{ID}}" class="btn btn-info btn-xs btn-right add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
+										<!-- </label> -->
+
+										<div class="add-remove__note">
+											<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
+
+											<p class="note"><strong>NOTE:</strong> Pairs with no pattern in the "Find" field will be ignored.</p>
+										</div>
+									</div>
+								</div>
+							</fieldset>
+						</li>
+
+			</div>
