@@ -35,17 +35,33 @@ require_once('HTML-includes/submit.fixed.html');
 <!-- START: templates -->
 
 		<div id="templates" class="hide">
-<?php
-require_once('HTML-includes/templates/regex-pair.tmpl.html');
-require_once('HTML-includes/templates/find-input.tmpl.html');
-require_once('HTML-includes/templates/find-textarea.tmpl.html');
-require_once('HTML-includes/templates/replace-input.tmpl.html');
-require_once('HTML-includes/templates/replace-textarea.tmpl.html');
-require_once('HTML-includes/templates/regex-engine-item.tmpl.html');
-require_once('HTML-includes/templates/match-sample-item.tmpl.html');
-require_once('HTML-includes/templates/match-sample.tmpl.html');
-require_once('HTML-includes/templates/match-regex.tmpl.html');
-?>
+			<div id="instance">
+<?php require_once('HTML-includes/templates/regex-pair.tmpl.html'); ?>
+			</div>
+			<div id="find-input">
+<?php require_once('HTML-includes/templates/find-input.tmpl.html'); ?>
+			</div>
+			<div id="find-textarea">
+<?php require_once('HTML-includes/templates/find-textarea.tmpl.html'); ?>
+			</div>
+			<div id="replace-input">
+<?php require_once('HTML-includes/templates/replace-input.tmpl.html'); ?>
+			</div>
+			<div id="replace-textarea">
+<?php require_once('HTML-includes/templates/replace-textarea.tmpl.html'); ?>
+			</div>
+			<div id="regex-engine-item">
+<?php require_once('HTML-includes/templates/regex-engine-item.tmpl.html'); ?>
+			</div>
+			<div id="match-sample-item">
+<?php require_once('HTML-includes/templates/match-sample-item.tmpl.html'); ?>
+			</div>
+			<div id="match-sample">
+<?php require_once('HTML-includes/templates/match-sample.tmpl.html'); ?>
+			</div>
+			<div id="match-regex">
+<?php require_once('HTML-includes/templates/match-regex.tmpl.html'); ?>
+			</div>
 		</div>
 
 <!--  END:  templates -->
