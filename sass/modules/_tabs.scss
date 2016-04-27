@@ -3,7 +3,7 @@
 	position: relative;
 	padding: 2em 1em 1em;
 	margin-top: 3em;
-	border-top: $border-width $border-style $border-color;
+	border-top: $border-width $border-style $border-colour;
 
 	.tab-pane {
 		display: none;
@@ -27,7 +27,7 @@
 			padding-left: 0%;
 			display: inline-block;
 			padding: 0.5em 1em;
-			border: $border-width $border-style $border-color;
+			border: $border-width $border-style $border-colour;
 			border-top-left-radius: $border-radius;
 			border-top-right-radius: $border-radius;
 			border-bottom: none;
@@ -41,8 +41,8 @@
 			cursor: pointer;
 		}
 		&:checked + label {
-			background: $background-color;
-			color: $font-color;
+			background: $background-colour;
+			color: $font-colour;
 			font-weight: bold;
 			cursor: default;
 			 + .tab-pane {

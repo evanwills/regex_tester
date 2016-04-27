@@ -1,10 +1,19 @@
 // Colours
 
-$font-color: #222;
-$background-color: #fff;
+$font-colour: #222;
+$background-colour: #fff;
 $light-grey: #ddd;
 $light-green: #dfd;
 $light-blue: #eef;
+
+
+$colour-default: #f7f2f2;
+$colour-primary: #616fed;
+$colour-secondary: #627d4d;
+$colour-success: #91DCB4;
+$colour-info: #E3E653;
+$colour-warning: #FFC437;
+$colour-danger: #ff6554;
 
 // Fonts
 
@@ -15,7 +24,7 @@ $font-size: 16px;
 
 
 // Borders
-$border-color: $light-grey;
+$border-colour: $light-grey;
 $border-width: 0.05em;
 $border-style: solid;
 $border-radius: 0.3em;
