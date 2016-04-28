@@ -45,7 +45,7 @@
 }
 
 @mixin set-text-colour($input) {
-	$contrast: contrast-color($input, $font-colour, $background-colour, 30%);
+	$contrast: contrast-color($input, $font-colour, $background-colour);
 	@if $contrast == $background-colour {
 		color: $background-colour;
 	}

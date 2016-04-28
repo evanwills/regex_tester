@@ -66,42 +66,56 @@
 		}
 		$top-colour: adjust-lightness($colour, -20%);
 		$bottom-colour: adjust-lightness($colour, -30%);
+		$adj-hov: -10%;
+		$adj-act: 20%;
+		$adj-dis: 20%;
+		$adj-dis-sat: 50%;
+		$pos-first: 0%;
+		$pos-second: 33%;
+		$pos-third: 100%;
 
 
 		&.btn-#{$sel} {
 			@include set-text-colour($colour);
-			@include background-image(linear-gradient(top, $top-colour 0%, $colour 33%, $bottom-colour 100%));
+			@include background-image(
+				linear-gradient(
+					top,
+					$top-colour $pos-first,
+					$colour $pos-second,
+					$bottom-colour $pos-third
+				)
+			);
 
 			&:hover {
-				@include set-text-colour(adjust-lightness($colour, -20%));
+				@include set-text-colour(adjust-lightness($colour, $adj-hov));
 				@include background-image(
 					linear-gradient(
 						top,
-						adjust-lightness($top-colour, -20%) 0%,
-						adjust-lightness($colour, -20%) 33%,
-						adjust-lightness($bottom-colour, -20%) 100%
+						adjust-lightness($top-colour, $adj-hov) $pos-first,
+						adjust-lightness($colour, $adj-hov) $pos-second,
+						adjust-lightness($bottom-colour, $adj-hov) $pos-third
 					)
 				);
 			}
 			&:active {
-				@include set-text-colour(adjust-lightness(adjust-saturation($colour, 50%), 30%));
+				@include set-text-colour(adjust-lightness($colour, $adj-act));
 				@include background-image(
 					linear-gradient(
 						top,
-						adjust-lightness($top-colour, 30%) 0%,
-						adjust-lightness($colour, 30%) 33%,
-						adjust-lightness($bottom-colour, 30%) 100%
+						adjust-lightness($top-colour, $adj-act) $pos-first,
+						adjust-lightness($colour, $adj-act) $pos-second,
+						adjust-lightness($bottom-colour, $adj-act) $pos-third
 					)
 				);
 			}
 			&:disabled {
-				@include set-text-colour(adjust-lightness($colour, 30%));
+				@include set-text-colour(adjust-lightness(adjust-saturation($colour, $adj-dis-sat), $adj-dis));
 				@include background-image(
 					linear-gradient(
 						top,
-						adjust-lightness(adjust-saturation($top-colour, 50%), 30%) 0%,
-						adjust-lightness(adjust-saturation($colour, 50%), 30%) 33%,
-						adjust-lightness(adjust-saturation($bottom-colour, 50%), 30%) 100%
+						adjust-lightness(adjust-saturation($top-colour, $adj-dis-sat), $adj-dis) $pos-first,
+						adjust-lightness(adjust-saturation($colour, $adj-dis-sat), $adj-dis) $pos-second,
+						adjust-lightness(adjust-saturation($bottom-colour, $adj-dis-sat), $adj-dis) $pos-third
 					)
 				);
 			}
