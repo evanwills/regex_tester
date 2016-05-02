@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>Regex debugger (es5 with PHP fallback)</title>
-		<link href="regex.css" rel="stylesheet" />
+		<link href="stylesheets/regex.css" rel="stylesheet" />
 		<link href="bootstrap-3.3.6-dist/css/bootstrap.css" rel="stylesheet" />
 		<link href="bootstrap-3.3.6-dist/css/bootstrap-theme.css" rel="stylesheet" />
 	</head>
@@ -187,9 +187,9 @@
 				<legend><h2>Submit details</h2></legend>
 				<p>
 					<label for="test">Test the regular expressions against the sample only</label><!--
-					--><input type="submit" name="submit_test" id="submitTest" value="Test only" title="Test regex and sample only" class="btn btn-success test b-left" /><!--
+					--><input type="submit" name="submit_test" id="submitTest" value="Test only" title="Test regex and sample only" class="btn btn-success test btn-left" /><!--
 					--><label for="replace">Use the regular expressions to do a find and replace</label><!--
-					--><input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change b-right" />
+					--><input type="submit" name="submit_replace" id="submitReplace" value="Replace" title="Test regex and sample only" class="btn btn-danger change btn-right" />
 				</p>
 
 				<button type="button" id="settingsBtn" class="btn btn-primary btn-sm pull-right btn-round" data-toggle="modal" data-target="#settings" title="Change settings">
@@ -231,7 +231,7 @@
 								</span>
 								<span class="col-xs-12 col-sm-6 add-remove">
 									<!-- <label for="addBefore{{ID}}"> -->
-										<button id="addBefore{{ID}}" class="btn btn-info btn-before add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
+										<button id="addBefore{{ID}}" class="btn btn-info btn-before btn-left add-pairs" data-regex="{{ID}}" data-pos="before"><span class="glyphicon glyphicon-plus"></span> Add <span class="sr-only">a new find/replace pair</span> before</button>
 									<!-- </label> -->
 
 									<!-- <label for="remove{{ID}}"> -->
@@ -239,7 +239,7 @@
 									<!-- </label> -->
 
 									<!-- <label for="addAfter{{ID}}"> -->
-										<button id="addAfter{{ID}}" class="btn btn-info btn-after add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
+										<button id="addAfter{{ID}}" class="btn btn-info btn-after btn-right add-pairs" data-regex="{{ID}}" data-pos="after"> Add <span class="sr-only">a new find/replace pair</span> after <span class="glyphicon glyphicon-plus"></span></button>
 									<!-- </label> -->
 
 									<p>Often it is easier to use multiple simple consecutive regular expressions to effect changes rather than try and do it with a single highly complex (and therefore fragile) regex. Add additional Find/Replace pairs.</p>
@@ -308,8 +308,11 @@
 		<script type="text/javascript" src="jquery-2.2.1.min.js"></script>
 		<script type="text/javascript" src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="xregexp/xregexp-all.js"></script>
+		<script type="text/javascript" src="regexRendeHelperFuncs.js"></script>
 		<script type="text/javascript" src="regex.engines.js"></script>
 		<script type="text/javascript" src="regexDoer.Local.js"></script>
+		<script type="text/javascript" src="regexDoer.VanillaJS.js"></script>
+		<script type="text/javascript" src="regexDoer.xRegExpJS.js"></script>
 		<script type="text/javascript" src="regexDoer.RemoteJSON.js"></script>
 		<script type="text/javascript" src="regexDoer.RemoteXML.js"></script>
 		<script type="text/javascript" src="regex.tester.js"></script>

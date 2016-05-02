@@ -20,7 +20,7 @@ if (typeof window.console !== 'object') {
 $.RegexTest = function (varieties) {
 	'use strict';
 
-	var doRenderWS = function (input) { return input; },
+	var doRenderWS = setRenderWSfunc(false),
 		engines = [],
 		maxLenMatch = '#matched_len',
 		maxLenSamp = '#sample_len',
@@ -47,60 +47,6 @@ $.RegexTest = function (varieties) {
 		wsTrim = '#ws_trim',
 		z = 0;
 
-	/**
-	 * @function setIDitem() replaces keywords in input with id value
-	 *
-	 * @var [str] input string to be updated
-	 * @var [int] id value to replace keyword
-	 *
-	 * @return [str] updated value of input
-	 */
-	function setIDitem(input, id) {
-		input = input.replace(/\{\{ID\}\}/g, id);
-		return input.replace(/\{\{ITEM\}\}/g, (id + 1));
-	}
-
-
-	function htmlEncode(input) {
-		var el = document.createElement("div");
-		el.innerText = el.textContent = input;
-		return el.innerHTML;
-	}
-
-
-	function setRenderWSfunc(e) {
-		if ($(e.target).val() === 1) {
-			doRenderWS = function (input) {
-				var a = 0,
-					find = [],
-					replace = [];
-
-				console.log('input = ', input);
-				if (typeof input !== 'string') {
-					console.warn('renderWS() expects first input to be a string. ' + typeof input + 'given.');
-					throw { message: 'renderWS() expects first input to be a string. ' + typeof input + 'given.'};
-				}
-
-				find.push(new RegExp(' ', 'g'));
-				replace.push('[[[space]]]');
-				find.push(new RegExp("\n", 'g'));
-				replace.push('[[[new line]]]\n');
-				find.push(new RegExp("\r", 'g'));
-				replace.push('[[[return]]]\r');
-				find.push(new RegExp("\l", 'g'));
-				replace.push('[[[line feed]]]\l');
-				find.push(new RegExp("\t", 'g'));
-				replace.push('[[[tab]]]\t');
-
-				for (a = 0; a < find.length; a += 1) {
-					input = htmlEncode(input.replace(find[a], replace[a]));
-				}
-				return input.replace(/\[\[(\[(?:space|new line|return|line feed|tab)\])\]\]/g, '<span class="spc">$1</span>');
-			};
-		} else {
-			doRenderWS = function (input) { return input; };
-		}
-	}
 
 
 	/**
@@ -410,12 +356,12 @@ $.RegexTest = function (varieties) {
 		var a = 0;
 
 		console.log('inside parseSample()');
-		console.log('$(' + sampleField + ').data(haschanged): ', $(sampleField).data('haschanged'));
 		if ($(sampleField).data('haschanged')) {
 			// purge sample
 			parsedSample = [];
 			// make sample an array containing a single string
 			parsedSample.push($(sampleField).val());
+			console.log('parsedSample = ', parsedSample);
 
 			if ($(splitSample).is(':checked') && $(sampleDelim).val() !== '') {
 				// break up sample
@@ -604,13 +550,13 @@ $.RegexTest = function (varieties) {
 
 	function renderMatchBlock(matches) {
 		var a = 0,
-			output = $('#match-sample-item').html().replace('{{MATCH_0}}', htmlEncode(doRenderWS(matches.wholeMatch.substr(0, state.maxLenMatch)))),
+			output = $('#match-sample-item').html().replace('{{MATCH_0}}', doRenderWS(matches.wholeMatch.substr(0, state.maxLenMatch))),
 			subpatterns = '';
 
 		if (matches.subPatterns.length > 0) {
 			subpatterns = '\n\t\t\t\t\t\t\t\t\t\t<ol class="match-subpatterns">';
 			for (a = 0; a < matches.subPatterns.length; a += 1) {
-				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + htmlEncode(doRenderWS(matches.subPatterns[a].substr(0, state.maxLenMatch))) + '</li>';
+				subpatterns += '\n\t\t\t\t\t\t\t\t\t\t\t<li>' + doRenderWS(matches.subPatterns[a].substr(0, state.maxLenMatch)) + '</li>';
 			}
 			subpatterns += '\n\t\t\t\t\t\t\t\t\t\t</ol>\n';
 		}
@@ -675,7 +621,7 @@ $.RegexTest = function (varieties) {
 		for (a = 0; a < sampleMatches.length; a += 1) {
 			regexes += renderRegexBlock(sampleMatches[a]);
 		}
-		output = $('#match-sample').html().replace('{{SAMPLE}}', htmlEncode(doRenderWS(sampleStr.substr(0, state.maxLenSamp))));
+		output = $('#match-sample').html().replace('{{SAMPLE}}', doRenderWS(sampleStr.substr(0, state.maxLenSamp)));
 		output = output.replace('{{MATCH_REGEX}}', regexes);
 		return output;
 	}
@@ -911,7 +857,7 @@ $.RegexTest = function (varieties) {
 		if (workingEngine.getURL() === false) {
 
 			if (workingEngine.getName() === 'Vanilla JS') {
-				regexDoer = new $.RegexDoerLocal(false);
+				regexDoer = new $.RegexDoerVanillaJS(false);
 			} else {
 				regexDoer = new $.RegexDoerLocal(true);
 			}
@@ -952,7 +898,17 @@ $.RegexTest = function (varieties) {
 	});
 
 	$(sampleDelim).on('change', function () { sampleHasChanged(true); });
-	$(renderWs).on('change', setRenderWSfunc);
+
+	$(renderWs).on('change', function(e) {
+		var tmp = false;
+		if ($(e.target).val() === '1') {
+			tmp = true;
+		} else {
+			tmp = false
+		}
+		doRenderWS = setRenderWSfunc(tmp);
+	});
+
 	$(resetBtn).on('click', clearAllFields);
 };
 

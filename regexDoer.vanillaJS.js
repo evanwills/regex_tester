@@ -30,7 +30,7 @@ $.RegexDoerVanillaJS = function () {
                 if (regexObj.isGlobal) {
                     tmpLen = tmpMatch.length;
                     for (a = 0; a < tmpLen; a += 1) {
-                        output.result.push(tmpMatch[a].match(regexObj.regexp));
+                        output.result.push(tmpMatch[a].match(regexObj.regexpNonGlobal));
                     }
                 } else {
                     output.result.push(tmpMatch);
@@ -52,7 +52,7 @@ $.RegexDoerVanillaJS = function () {
 		console.log('inside RegexDoerVanillaJS::testRegex()');
 
 		for (a = 0; a < jsonObj.regexPairs.length; a += 1) {
-            tmpRegex = {regexp: null, isGlobal: false, ok: true, errorMsg: ''};
+            tmpRegex = {regexp: null, isGlobal: false, ok: true, errorMsg: '', regexpNonGlobal: null};
 
 			try {
 				tmpRegex.regexp = new RegExp(jsonObj.regexPairs[a].find, jsonObj.regexPairs[a].modifiers);
@@ -60,14 +60,16 @@ $.RegexDoerVanillaJS = function () {
 				tmpRegex.errorMsg = e.message;
 				tmpRegex.ok = false;
 			}
+			console.log(jsonObj.regexPairs[0].modifiers.match(/g/));
             if (jsonObj.regexPairs[0].modifiers.match(/g/)) {
                 tmpRegex.isGlobal = true;
+				console.log("jsonObj.regexPairs[" + a + "].modifiers.replace('g', '') = ", jsonObj.regexPairs[a].modifiers.replace('g', ''));
+				tmpRegex.regexpNonGlobal = new RegExp(jsonObj.regexPairs[a].find, jsonObj.regexPairs[a].modifiers.replace('g', ''));
             }
             jsonObj.regexPairs[a].parsed = tmpRegex;
         }
 
-
-        for (a = 0; a < jsonObj.sample.length; a += 1) {
+        for (a = 0; a < jsonObj.samples.length; a += 1) {
 
             tmpResult = {'id': 0, 'ok': true, 'matched': false, 'result': []};
 
@@ -76,10 +78,10 @@ $.RegexDoerVanillaJS = function () {
 				for (b = 0; b < jsonObj.regexPairs.length; b += 1) {
                     tmpResult.id = jsonObj.regexPairs[b].id;
                     if (jsonObj.regexPairs[b].parsed.ok === true) {
-                        tmpSampleResult = processRegex(jsonObj.regexPairs[b].parsed, jsonObj.sample[a]);
+                        tmpSampleResult = processRegex(jsonObj.regexPairs[b].parsed, jsonObj.samples[a]);
                         tmpResult.result.push(tmpSampleResult.result);
                         tmpResult.matched = tmpSampleResult.matched;
-                        jsonObj.sample[a] = jsonObj.sample[a].replace(jsonObj.regexPairs[b].parsed.regexp, jsonObj.regexPairs[b].replace);
+                        jsonObj.samples[a] = jsonObj.samples[a].replace(jsonObj.regexPairs[b].parsed.regexp, jsonObj.regexPairs[b].replace);
                     } else {
                         tmpResult.ok = false;
                         tmpResult.errorMsg = jsonObj.regexPairs[b].parsed.errorMsg;
@@ -93,20 +95,6 @@ $.RegexDoerVanillaJS = function () {
 	this.validateRegex = function (regex, modifiers, delim) {};
 	this.setEngine = function (regexEngineObj) {
 		engine = regexEngineObj;
-	};
-	this.validateDelim = function (input) {
-		return engine.validateDelim(input);
-	};
-};
-
-$.RegexDoerXregexp = function () {
-	"use strict";
-	var engine;
-	this.findReplace = function (input) {};
-	this.testRegex = function (input) {};
-	this.validateRegex = function (regex, modifiers, delim) {};
-	this.setEngine = function (input) {
-		engine = input;
 	};
 	this.validateDelim = function (input) {
 		return engine.validateDelim(input);
