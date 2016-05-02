@@ -1,0 +1,30 @@
+
+#butt {
+	background-color: rgba(220, 220, 220, 0.7);
+	bottom: 0;
+	left: 0;
+	padding-bottom: 0.5em;
+	padding-top: 0.5em;
+	position: fixed;
+	right: 0;
+	text-align: center;
+}
+#butt p { margin: 0% !important; }
+#butt legend {
+	display: none;
+}
+#butt ul {
+	text-align: center;
+}
+
+
+#settingsBtn {
+	position: absolute;
+	right: 0.4em;
+	bottom: 0.4em;
+}
+#resetBtn {
+	position: absolute;
+	left: 0.4em;
+	bottom: 0.4em;
+}
