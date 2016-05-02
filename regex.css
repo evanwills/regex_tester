@@ -36,8 +36,9 @@ li.bad-regex {
     box-shadow: 0 0 0.5em #f00;
 }
 .hide {
-	display: none; }
+	display: none;
 }
+
 #regexes div:hover p {
     display: block;
 }
