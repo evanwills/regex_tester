@@ -1,3 +1,6 @@
+#matches {
+	padding-bottom: 3em;
+}
 .match-sample {
 	border-top: 0.1em solid #ccc;
 	padding-top: 1em;
@@ -53,5 +56,182 @@ pre {
 	}
 	&.replace {
 		background-color: #eef;
+	}
+}
+
+
+
+.spc {
+	color: #bbb;
+	font-style: italic;
+	margin: 0 0.3em;
+	display: inline-block;
+	padding: 0.2em;
+	background-color: #f8f8f8;
+	font-size: 86%;
+}
+
+
+section#results {
+    padding: 0.5em 0;
+    position: relative;
+
+	h2 {
+		color: rgb(0, 75, 0);
+		margin: 0;
+		padding: 0.5em 1em 0.5em 0.5em;
+	}
+
+	ol {
+		padding: 1em;
+	}
+}
+
+.results ol li {
+    border-top: 0.1em solid #000;
+    list-style-type: lower-alpha;
+    padding-bottom: 0.5em;
+    padding-top: 1.5em;
+	&:first-of-type {
+		background-color: transparent;
+		border-top: medium none;
+		margin-top: 1em;
+	}
+	 ol {
+		background-color: transparent;
+		border: medium none;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		box-shadow: none;
+		margin-top: -1em;
+		max-height: none;
+		padding: 0;
+		position: static;
+	}
+}
+
+ol.multi-sample li {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #888 -moz-use-text-color -moz-use-text-color;
+    border-image: none;
+    border-style: dashed none none;
+    border-width: 0.1em medium medium;
+    list-style-type: lower-alpha;
+    padding-bottom: 0;
+    padding-top: 0.5em;
+}
+ol.single-sample li, .multi-sample ol li {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #888 -moz-use-text-color -moz-use-text-color;
+    border-image: none;
+    border-style: dotted none none;
+    border-width: 0.1em medium medium;
+    list-style-type: decimal;
+    padding-bottom: 0;
+    padding-top: 0.5em;
+}
+ol.single-sample li:first-of-type, .multi-sample ol li:first-of-type {
+    border-top: medium none;
+    margin-top: 0;
+    padding-top: 0;
+}
+
+
+dd.matched ol {
+	li {
+		border-top: medium none;
+		list-style-type: lower-roman;
+		margin: 0 0 0 2em;
+		padding: 0;
+		ol {
+			margin-top: 0;
+			padding-bottom: 0.5em;
+		}
+	}
+
+	&.matched-parts {
+		li {
+			list-style-type: decimal;
+			margin-bottom: 0;
+			margin-top: 0;
+			padding-bottom: 0;
+			padding-top: 0;
+		}
+		&.named {
+			counter-reset: mblock;
+			li {
+				counter-increment: mblock;
+				display: block;
+				list-style: outside none none;
+				margin-left: 0;
+				padding-left: 0;
+
+				&::before {
+					content: counter(mblock, decimal) ". ";
+					padding-right: 0.5em;
+				}
+				span {
+					&.name {
+						display: table-cell;
+						font-family: monospace;
+						font-weight: bold;
+						padding-right: 0.5em;
+					}
+					&.value {
+						display: table-cell;
+						&::before {
+							content: ": ";
+						}
+					}
+				}
+			}
+//			li {
+//				display: table-row;
+//			}
+		}
+	}
+}
+.regex-pattern, .error_high {
+    font-family: monospace;
+}
+dt.dud, dt.dud + dd {
+    color: #aaa;
+}
+span.ok, span.error, span.problem {
+    padding: 0.3em 0.1em;
+	&:first-of-type {
+		padding-left: 0.6em;
+	}
+	&:last-of-type {
+		padding-right: 0.6em;
+	}
+}
+span {
+	&.ok {
+		background-color: #0f0;
+		color: #00f;
+	}
+	&.problem {
+		background-color: #ff0;
+		color: #f00;
+	}
+	&.error {
+		background-color: #f00;
+		color: #ff0;
+	}
+	&.whole {
+		font-size: 120%;
+		&::after {
+			color: #55b;
+			content: " (whole string)";
+			font-size: 83.3%;
+			padding-left: 0.5em;
+		}
 	}
 }

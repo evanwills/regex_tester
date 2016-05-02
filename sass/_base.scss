@@ -1,0 +1,23 @@
+
+body {
+    box-sizing: border-box;
+    font-family: arial,helvetica,sans-serif;
+    font-size: 120%;
+    padding: 0 1em;
+}
+
+
+.hide, #templates {
+	display: none;
+}
+
+
+
+label span, #butt label {
+    left: -1000em;
+    position: absolute;
+    top: -1000em;
+}
+label span.engine_type {
+	position: static;
+}
