@@ -33,11 +33,14 @@ $.RegexDoerLocal = function (doXregexp) {
 				}
 				return output;
 			};
+			this.getGlobalRegex = function (regex, modifiers) {
+				return XRegExp(regex, modifiers.replace('g',''));
+			};
 			this.match = function (regexObj, sample) {
 				return XRegExp.exec(sample);
 			};
 			this.replace = function (regexObj, replacement, sample) {
-				return XRegExp.replace(sample, regexObj, replacement);
+				return XRegExp.replace(sample, regexObj.regex, replacement);
 			};
 		};
 		mode = 'xRegExp';
@@ -53,11 +56,31 @@ $.RegexDoerLocal = function (doXregexp) {
 				}
 				return output;
 			};
-			this.match = function (regexObj, sample) {
-				return sample.match(regexObj);
+			this.getGlobalRegex = function (regex, modifiers) {
+				return new RegExp(regex, modifiers.replace('g',''));
 			};
-			this.replace = function (regexObj, replacement, sample) {
-				return sample.replace(regexObj, replacement);
+			this.match = function (regexObj, sample) {
+				var a = 0,
+					output = [],
+					tmp = [],
+					tmpSub = [];
+
+				tmp = sample.match(regexObj.regexp);
+
+				if (regexObj.isGlobal === true && tmp !== null) {
+					for (a = 0; a < tmp.length; a += 1) {
+						tmpSub = tmp[a].match(regexObj.regexpNonGlobal);
+
+						output.push({'wholeMatch': tmpSub.shift(), 'subPatterns': tmpSub});
+					}
+				} else {
+					output = [{'wholeMatch': tmp.shift(), 'subPatterns': tmp}];
+				}
+
+				return output;
+			};
+			this.replace = function (parsedRegex, replacement, sample) {
+				return sample.replace(parsedRegex, replacement);
 			};
 		};
 	}
@@ -86,24 +109,10 @@ $.RegexDoerLocal = function (doXregexp) {
 			tmpResult = {'wholeMatch': '', 'subPatterns': []};
 
 		if (regexObj.ok === true) {
-			tmpMatch = regexAdapter.match(regexObj.regexp, sample);
-			if (tmpMatch !== null && tmpMatch.length !== null) {
+			tmp = regexAdapter.match(regexObj, sample);
+			if (tmp !== null && tmp.length !== null && tmp.length > 0) {
 				output.matched = true;
-				tmpLen = tmpMatch.length;
-				if (regexObj.isGlobal) {
-					for (a = 0; a < tmpLen; a += 1) {
-						tmp = tmpMatch[a].match(regexObj.regexp);
-                        output.result.push({'wholeMatch': tmp.shift(), 'subPatterns': tmp});
-                    }
-                } else {
-					tmp = [];
-					for (a = 0; a < tmpLen; a += 1) {
-						if (tmpMatch[a] !== undefined) {
-							tmp.push(tmpMatch[a]);
-						}
-					}
-					output.result.push({'wholeMatch': tmp.shift(), 'subPatterns': tmp});
-				}
+				output.result = tmp;
 			}
 		}
         return output;
@@ -153,28 +162,35 @@ $.RegexDoerLocal = function (doXregexp) {
 
 
 	this.validateRegex = function (regex, modifiers, delim) {
-		var output = {regexp: null, isGlobal: false, ok: true, errorMsg: ''};
+		var output = {'regexp': null, 'isGlobal': false, 'ok': true, 'errorMsg': '', 'regexpNonGlobal': null};
 
 		if (typeof regex !== 'string' || regex === '') {
-			console.warn('$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given');
-			throw {'message': '$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given'};
+			output.errorMsg = '$.RegexDoerLocal.validateRegex() expects first parameter regex to be a non-empty string. "' + typeof regex + '" given';
+			output.ok = false;
+			console.warn(output.errorMsg);
+//			throw {'message': output.errorMsg};
 		}
 		try {
 			engine.validateModifiers(modifiers);
 		} catch (e) {
-			console.warn('$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message);
-			throw {'message': '$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message};
+			output.errorMsg = '$.RegexDoerLocal.validateRegex() expects second parameter modifiers to be a valid list of RegExp modifiers. ' + e.message;
+			output.ok = false;
+			console.warn(output.errorMsg);
+//			throw {'message': output.errorMsg};
 		}
 
-		console.log(regex);
-		try {
-			output.regexp = regexAdapter.tryRegExp(regex, modifiers);
-		} catch (e) {
-			output.errorMsg = e.message;
-			output.ok = false;
-		}
-		if (modifiers.match(/g/)) {
-			output.isGlobal = true;
+		if (output.ok === true) {
+
+			try {
+				output.regexp = regexAdapter.tryRegExp(regex, modifiers);
+			} catch (e) {
+				output.errorMsg = e.message;
+				output.ok = false;
+			}
+			if (output.ok === true && modifiers.match(/g/)) {
+				output.isGlobal = true;
+				output.regexpNonGlobal = regexAdapter.tryRegExp(regex, modifiers.replace('g', ''));
+			}
 		}
 		return output;
 	};
