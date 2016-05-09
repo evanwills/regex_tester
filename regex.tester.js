@@ -857,7 +857,7 @@ $.RegexTest = function (varieties) {
 		if (workingEngine.getURL() === false) {
 
 			if (workingEngine.getName() === 'Vanilla JS') {
-				regexDoer = new $.RegexDoerVanillaJS(false);
+				regexDoer = new $.RegexDoerLocal(false);
 			} else {
 				regexDoer = new $.RegexDoerLocal(true);
 			}
