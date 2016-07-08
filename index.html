@@ -2,15 +2,15 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>Regex debugger (es5 with PHP fallback)</title>
-		<link href="stylesheets/regex.css" rel="stylesheet" />
+		<title>Regex Tester (es5 with PHP fallback)</title>
 		<link href="bootstrap-3.3.6-dist/css/bootstrap.css" rel="stylesheet" />
 		<link href="bootstrap-3.3.6-dist/css/bootstrap-theme.css" rel="stylesheet" />
+		<link href="stylesheets/regex.css" rel="stylesheet" />
 	</head>
 	<body>
 		<header>
-			<h1>Regex debugger</h2>
-			<h2>(es5 with PHP fallback)</h2>
+			<h1><em class="h3">Pluggable</em> Regex Tester</h2>
+			<!-- <h2 class="h4">(es5 with PHP fallback)</h2> -->
 		</header>
 		<form id="regex" method="post" action="/js_regex_tester/">
 			<ul class="nav nav-tabs">
@@ -47,7 +47,7 @@
 					<legend class="h2"><label for="outputContent">Find &amp; replaces with <span class="engine_type"></span></label></legend>
 
 
-					<textarea id="outputContent" name="outputContent" readonly="readonly"></textarea>
+					<textarea id="outputContent" name="outputContent" readonly="readonly" class="form-control"></textarea>
 				</fieldset>
 			</div>
 
@@ -317,6 +317,6 @@
 		<script type="text/javascript" src="regexDoer.RemoteXML.js"></script>
 		<script type="text/javascript" src="regex.tester.js"></script>
 		<script type="text/javascript" src="regexTester.init.js"></script>
-		<script type="text/javascript" src="regexTesterDevDefaults.js"></script>
+		<!-- <script type="text/javascript" src="regexTesterDevDefaults.js"></script> -->
 	</body>
 </html>
