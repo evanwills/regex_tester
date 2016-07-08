@@ -95,7 +95,6 @@ $.RegexDoerVanillaJS = function () {
 			output.ok = false;
 		}
 
-		console.log(regex);
 		try {
 			output.regexp = new RegExp(regex, modifiers);
 		} catch (e) {
@@ -110,8 +109,7 @@ $.RegexDoerVanillaJS = function () {
 
 	};
 
-	function testAllRegexes(allRegexes, parent)
-	{
+	function testAllRegexes(allRegexes, parent) {
 		var a = 0,
 			output = [];
 
@@ -177,7 +175,7 @@ $.RegexDoerVanillaJS = function () {
 
 	this.findReplace = function (jsonObj, renderer) {
 
-		jsonObj= testAllRegexes(jsonObj.regexPairs, this);
+		jsonObj = testAllRegexes(jsonObj.regexPairs, this);
 	};
 
 	this.setEngine = function (regexEngineObj) {
