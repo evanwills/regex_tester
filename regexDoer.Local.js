@@ -34,7 +34,7 @@ $.RegexDoerLocal = function (doXregexp) {
 				return output;
 			};
 			this.getGlobalRegex = function (regex, modifiers) {
-				return XRegExp(regex, modifiers.replace('g',''));
+				return XRegExp(regex, modifiers.replace('g', ''));
 			};
 			this.match = function (regexObj, sample) {
 				return XRegExp.exec(sample);
@@ -268,8 +268,7 @@ $.RegexDoerLocal = function (doXregexp) {
 	};
 
 	this.setEngine = function (regexEngineObj) {
-		if( regexEngineObj instanceof RegexEngine !== true )
-		{
+		if (regexEngineObj instanceof RegexEngine !== true) {
 			throw {'message': 'RegexDoerLocal::setEngine() expects only parameter regexEngineObj to be an instance of RegexEngine'};
 		}
 		engine = regexEngineObj;
