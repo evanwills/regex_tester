@@ -134,7 +134,7 @@ $.RegexTest = function (varieties) {
 				newItem,
 				tmpElement;
 
-			oldID = (oldID * 1);
+			oldID = parseInt(oldID, 10);
 			oldItem = oldID + 1;
 			newItem = newID + 1;
 
@@ -445,8 +445,8 @@ $.RegexTest = function (varieties) {
 				var newPair = {},
 					newPairID = 0;
 
-				if ($(this).data('regex') !== undefined && typeof ($(this).data('regex') * 1) === 'number') {
-					newPairID = ($(this).data('regex') * 1);
+				if ($(this).data('regex') !== undefined && typeof parseInt($(this).data('regex'), 10) === 'number') {
+					newPairID = parseInt($(this).data('regex'), 10);
 				} else {
 					console.warn('buildJSONobject() expects each regexPair block to have a data attribute named "regex" with a numeric value');
 					throw 'buildJSONobject() expects each regexPair block to have a data attribute named "regex" with a numeric value';
@@ -458,8 +458,8 @@ $.RegexTest = function (varieties) {
 			});
 		}
 
-		jsonObj.sampResultLen = ($(maxLenSamp).val() * 1);
-		jsonObj.matchResultLen = ($(maxLenMatch).val() * 1);
+		jsonObj.sampResultLen = parseInt($(maxLenSamp).val(), 10);
+		jsonObj.matchResultLen = parseInt($(maxLenMatch).val(), 10);
 		state.maxLenMatch = jsonObj.matchResultLen;
 		state.maxLenSamp = jsonObj.sampResultLen;
 
@@ -656,25 +656,25 @@ $.RegexTest = function (varieties) {
 			$('#matches-tab-btn a').tab('show');
 		} else {
 			switch (state.splitSampleChar) {
-				case '\\n':
-					char = "\n";
-					break;
-				case '\\r':
-					char = "\r";
-					break;
-				case '\\r\\n':
-					char = "\r\n";
-					break;
-				case '\\t':
-					char = "\t";
-					break;
-				default:
-					char = state.splitSampleChar;
+			case '\\n':
+				char = "\n";
+				break;
+			case '\\r':
+				char = "\r";
+				break;
+			case '\\r\\n':
+				char = "\r\n";
+				break;
+			case '\\t':
+				char = "\t";
+				break;
+			default:
+				char = state.splitSampleChar;
 			}
 			for (a = 0; a < input.samples.length; a += 1) {
 				input.samples[a] = doRenderWS(input.samples[a]);
 			}
-			output = input.samples.join(char);
+			output = outputEscaptedWSchars(input.samples.join(char));
 			if ($('#output-tab-btn').hasClass('hide')) {
 				$('#output-tab-btn').removeClass('hide');
 				$('#output').removeClass('hide');
@@ -904,7 +904,7 @@ $.RegexTest = function (varieties) {
 		if ($(e.target).val() === '1') {
 			tmp = true;
 		} else {
-			tmp = false
+			tmp = false;
 		}
 		doRenderWS = setRenderWSfunc(tmp);
 	});
