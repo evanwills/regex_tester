@@ -36,7 +36,7 @@ function htmlEncode(input) {
  *           white space in samples and matches
  *
  * NOTE: This also handles converting the HTML special chars into
- * 		 HTML character entitites using the htmlEncode() function
+ *       HTML character entitites using the htmlEncode() function
  *
  * @param {boolean}  input TRUE if white space should be encoded.
  *                         FALSE otherwise
@@ -91,8 +91,26 @@ function setRenderWSfunc(input) {
 			}
 			input = input.replace(/\[{2}(\[(?:space|new line|return|line feed|tab)\])\]{2}/g, '<span class="spc">$1</span>');
 			return input;
-		}
+		};
 	} else {
 		return function (input) { return htmlEncode(input); };
 	}
+}
+
+function outputEscaptedWSchars(input) {
+	var a = 0,
+		find = [
+			new RegExp('\\\\n', 'g'),
+			new RegExp('\\\\r', 'g'),
+			new RegExp('\\\\t', 'g')
+		],
+		replace = [
+			"\n",
+			"\r",
+			"	"
+		]
+	for (a = 0; a < 3; a += 1) {
+		input = input.replace(find[a],replace[a]);
+	}
+	return input;
 }
