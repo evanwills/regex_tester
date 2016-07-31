@@ -8,7 +8,7 @@ It's aim is to provide a way of testing regular expressions using a variety of r
 
 By using an API via HTTP you reduce the data being sent back and fourth to the server (which was a problem when applying regular expressions to a large chunk of text using the original [preg_test](https://github.com/evanwills/preg_test) version.)
 
-Currently the only regex engine implemented is the vanilla JavaScript Engine. But most of the work is done for the xRegExp and PHP PCRE engines.
+Currently the Vanilla JavaScript and PHP PCRE regex engines are implemented. Most of the work is done for the [xRegExp](https://github.com/slevithan/xregexp) (I just can't work out why it's not working).
 
 ## API
 ### Post object
