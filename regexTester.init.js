@@ -13,15 +13,13 @@ if (typeof window.console !== 'object') {
 $(document).ready(function () {
 	'use strict';
 	var	regex,
-		regexVarieties = [],
-		php;
-		URL = window.location.href.replace('index.html','');
+		regexVarieties = [];
 
 	regexVarieties.push(new RegexEngine({
 		'name': 'PHP PCRE',
 		'modifiers': 'imsxeADSXUJu',
 		'placeholder': 'is',
-		'URL': URL + 'php/regex_tester.json.api.php',
+		'URL': window.location.href.replace('index.html','') + 'php/regex_tester.json.api.php',
 		'format': 'json', // json | xml
 		'delim': '`'
 		// 'validDelims': '/{}[]()<>`~!| // white list of valid regular expression delimiters. Is put into a regex like so: '^[' + validDelims + ']$'
